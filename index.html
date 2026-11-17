@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-SBy+CWW8fuXFAV95nvKETwI2k8IAck0AdWTWpq494Zk='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-btxXGOZnd2ycJYjSLGjnFiSdKrG5chPRNuEXfZ6afww='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>تمرین</title>
@@ -185,7 +185,7 @@ table.wk3 th{color:var(--steel);font-weight:700;font-size:13.5px}
 .stepper button{width:44px;height:44px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--line);font-size:22px;font-weight:700;display:grid;place-items:center}
 .prose .btn{margin-top:14px}
 .credits li{font-size:13.5px;color:var(--steel)}
-.credits a{color:var(--chalk)}
+.credits a,.note a{color:var(--chalk)}
 
 @media (prefers-reduced-motion:reduce){#sheet,#sheet.open,#toast{transition:none}.btn:active{transform:none}}
 </style>
@@ -252,7 +252,7 @@ const VIDEOS = {
   'chest-press': 4/3, 'cable-row': 4/3, 'incline-db-press': 1, 'lat-pulldown': 1, 'rope-pushdown': 1, 'db-curl': 1,
   'leg-press': 4/3, 'leg-extension': 1, 'glute-bridge': 4/3, 'calf-raise': 1,
   'db-shoulder-press': 1, 'close-pulldown': 1, 'db-bench': 4/3, 'db-row': 1, 'lateral-raise': 4/3,
-  'cat-camel': 4/3, 'side-plank': 16/9, 'hip-flexor': 4/3, 'hip-thrust': 4/3, 'farmer-carry': 4/3, 'treadmill': 4/3, 'bike': 4/3
+  'cat-camel': 4/3, 'side-plank': 16/9, 'hip-flexor': 4/3, 'hip-thrust': 4/3, 'farmer-carry': 4/3, 'leg-curl': 4/3, 'face-pull': 4/3, 'treadmill': 4/3, 'bike': 4/3
 };
 const hasVid = v => !!v && Object.prototype.hasOwnProperty.call(VIDEOS, v);
 const PX = (slug, id) => `https://www.pexels.com/video/${slug}-${id}/`;
@@ -278,10 +278,12 @@ const CREDITS = [
   {fa:'هیپ تراست', src:'Pixabay', url:'https://pixabay.com/videos/crossfit-fitness-gym-workout-66367/'},
   {fa:'کشش جلوی لگن', src:'DVIDS، تفنگداران دریایی آمریکا', url:'https://www.dvidshub.net/video/551136'},
   {fa:'راه‌رفتن کشاورز', src:'DVIDS، تفنگداران دریایی آمریکا', url:'https://www.dvidshub.net/video/640980'},
+  {fa:'پشت پا با دستگاه', src:'Goulart، wger.de، CC BY-SA 4.0', url:'https://wger.de/en/exercise/365/view'},
+  {fa:'فیس‌پول', src:'Goulart، wger.de، CC BY-SA 4.0', url:'https://wger.de/en/exercise/222/view'},
   {fa:'تردمیل', src:'Pexels', url:PX('a-man-doing-leg-workout-on-the-treadmill', 4367637)},
   {fa:'دوچرخهٔ ثابت', src:'Pexels', url:PX('a-person-riding-an-exercise-bike-in-a-gym', 27861390)}
 ];
-const APP_VERSION = '۱٫۳';
+const APP_VERSION = '۱٫۴';
 
 /* ---------- program ---------- */
 const EX = {
@@ -880,7 +882,8 @@ function viewGuide() {
   const w = week();
   const credits = CREDITS.length
     ? `<h2>منبع ویدیوها</h2><ul class="credits">${CREDITS.map(c => `<li>${c.fa}: <a href="${c.url}" target="_blank" rel="noopener">${c.src}</a></li>`).join('')}</ul>` +
-      (CREDITS.some(c => c.src.startsWith('DVIDS')) ? '<p class="note">ویدیوهای DVIDS از آرشیو عمومی ارتش آمریکاست؛ استفاده از آن‌ها به معنی تأیید این اپ از طرف آن‌ها نیست.</p>' : '') : '';
+      (CREDITS.some(c => c.src.startsWith('DVIDS')) ? '<p class="note">ویدیوهای DVIDS از آرشیو عمومی ارتش آمریکاست؛ استفاده از آن‌ها به معنی تأیید این اپ از طرف آن‌ها نیست.</p>' : '') +
+      (CREDITS.some(c => c.src.includes('CC BY-SA')) ? '<p class="note">ویدیوهای wger با مجوز <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> هستند و برای این اپ بریده، کوتاه و سیاه‌وسفید شده‌اند؛ نسخهٔ تغییریافته هم با همین مجوز است.</p>' : '') : '';
   return `
   <h1 class="disp ptitle">راهنما</h1>
   <div class="prose">
