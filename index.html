@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Do5MGLIX7RCuO7TkC2prs01f4ArMNLHMA+myZoW1O4A='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>تمرین</title>
+<meta name="theme-color" content="#23282D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="تمرین">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="preload" href="fonts/IRANSansX-Regular.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="fonts/IRANSansX-ExtraBold.woff" as="font" type="font/woff" crossorigin>
+<style>
+@font-face{font-family:"IRANSansX";src:url(fonts/IRANSansX-Regular.woff) format("woff");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"IRANSansX";src:url(fonts/IRANSansX-Medium.woff) format("woff");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:"IRANSansX";src:url(fonts/IRANSansX-Bold.woff) format("woff");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"IRANSansX";src:url(fonts/IRANSansX-ExtraBold.woff) format("woff");font-weight:800;font-style:normal;font-display:swap}
+@font-face{font-family:"IRANSansX";src:url(fonts/IRANSansX-ExtraBlack.woff) format("woff");font-weight:950;font-style:normal;font-display:swap}
+:root{
+  --rubber:#23282D; --mat:#2D3338; --mat2:#363D43; --line:#3E464D;
+  --steel:#9CA5AC; --chalk:#F2F1EB; --hole:#1B1F23;
+  --c:#F2F1EB; --on:#1B1F23;
+  --st:env(safe-area-inset-top,0px); --sb:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{background:var(--rubber);-webkit-text-size-adjust:100%}
+body{margin:0;color:var(--chalk);font-family:"IRANSansX",system-ui,-apple-system,"SF Arabic","Geeza Pro",Tahoma,sans-serif;font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+body.lock{overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;touch-action:manipulation;text-align:inherit}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--chalk);outline-offset:3px;border-radius:6px}
+h1,h2,h3,p{margin:0}
+.disp{font-weight:950;line-height:1.3;letter-spacing:-.01em}
+#app{max-width:560px;margin:0 auto;padding:calc(var(--st) + 14px) 18px calc(var(--sb) + 160px)}
+
+/* weight plate: hole, steel hub, groove, coloured rubber, darker rim */
+.plate{--s:120px;width:var(--s);height:var(--s);flex:none;border-radius:50%;
+  background:
+    radial-gradient(circle,var(--hole) 0 12%,#CDD2D6 12.6% 18.4%,#7D868D 18.9% 20.4%,transparent 20.9%),
+    radial-gradient(circle,transparent 0 63%,rgba(0,0,0,.2) 63.5% 65.5%,transparent 66%),
+    var(--c);
+  box-shadow:inset 0 0 0 calc(var(--s)*.05) color-mix(in srgb,var(--c) 74%,#000)}
+
+.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.brand{font-size:30px}
+.wk{color:var(--steel);font-size:14px}
+
+.hero{display:flex;gap:20px;align-items:center;margin-top:14px;padding:18px 0 24px;border-bottom:1px solid var(--line)}
+.hero{flex-wrap:wrap}
+.hero .plate{--s:126px}
+.strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;width:100%;margin-top:4px}
+.strip img,.strip i{display:block;width:100%;aspect-ratio:1;border-radius:10px;object-fit:cover;background:var(--mat)}
+.strip i{box-shadow:inset 0 0 0 1.5px var(--line)}
+.hero .kick{color:var(--steel);font-size:14px}
+.sname{font-size:38px}
+.meta{color:var(--steel);font-size:14.5px;line-height:1.65}
+.hero .meta{margin:2px 0 14px}
+.last{color:var(--steel);font-size:14px;margin-top:12px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 26px;border-radius:999px;background:var(--c);color:var(--on);font-weight:800;font-size:16.5px}
+.btn.wide{display:flex;width:100%}
+.btn.line{background:transparent;color:var(--chalk);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn:active{transform:scale(.98)}
+
+.sec{margin:30px 0 2px;font-size:15px;color:var(--steel);font-weight:700}
+.row{display:flex;align-items:center;gap:14px;width:100%;min-height:68px;padding:12px 2px;border-bottom:1px solid var(--line)}
+.row .plate{--s:42px}
+.row .t{flex:1;min-width:0}
+.row .t b{display:block;font-size:17px;font-weight:800;line-height:1.5}
+.row .t small{display:block;font-size:13.5px;color:var(--steel);line-height:1.55}
+.chev{width:20px;height:20px;flex:none;color:var(--steel)}
+.pill{display:inline-block;margin-inline-start:8px;padding:0 9px;border-radius:999px;background:var(--c);color:var(--on);font-size:12px;font-weight:800;line-height:1.75;vertical-align:2px}
+
+.nav{display:flex;align-items:center;min-height:42px}
+.backbtn{display:inline-flex;align-items:center;gap:2px;min-height:42px;color:var(--steel);font-size:15px;font-weight:700}
+.backbtn svg{width:20px;height:20px}
+.shead{display:flex;align-items:center;gap:16px;margin:8px 0 10px}
+.shead .plate{--s:66px}
+.shead .sname{font-size:34px}
+
+.exlist{list-style:none;margin:0;padding:0}
+.ex{display:grid;grid-template-columns:minmax(0,44%) minmax(0,1fr);gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+.media{position:relative;display:block;width:100%;aspect-ratio:1;border-radius:16px;overflow:hidden;background:var(--mat)}
+.media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:var(--mat)}
+.num{position:absolute;top:8px;inset-inline-start:8px;min-width:28px;height:28px;padding:0 7px;border-radius:999px;background:rgba(27,31,35,.84);display:grid;place-items:center;font-size:14.5px;font-weight:800;line-height:1}
+.ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--steel);font-size:12.5px;line-height:1.4;text-align:center;padding:10px}
+.ph i{display:block;width:46%;aspect-ratio:1;border-radius:50%;border:3px dashed var(--line);box-shadow:inset 0 0 0 14px var(--mat),inset 0 0 0 17px var(--line)}
+.info h3{font-size:16.5px;font-weight:800;line-height:1.5}
+.info h3 button{display:block;width:100%}
+.en{font-size:12.5px;color:var(--steel);line-height:1.45}
+.dose{margin-top:6px;font-size:14.5px;line-height:1.6}
+.dose small{display:block;color:var(--steel);font-size:13.5px}
+.sets{display:flex;flex-wrap:wrap;gap:9px;margin-top:10px}
+.set{width:36px;height:36px;flex:none;border-radius:50%;box-shadow:inset 0 0 0 2.5px var(--c)}
+.set.done{background:radial-gradient(circle,var(--rubber) 0 18%,var(--c) 20%)}
+.wt{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:14px;color:var(--steel)}
+.wt input{width:70px;min-height:40px;padding:4px 6px;border-radius:10px;border:1px solid var(--line);background:var(--mat);color:var(--chalk);font:inherit;font-size:16px;text-align:center}
+.mini{display:inline-flex;align-items:center;min-height:38px;margin-top:10px;padding:4px 14px;border-radius:999px;box-shadow:inset 0 0 0 1.5px var(--line);font-size:14px;font-weight:700}
+
+.endrow{margin-top:8px}
+.finish{margin-top:24px}
+
+/* exercise sheet */
+#sheet{position:fixed;inset:0;z-index:30;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--rubber);visibility:hidden;transform:translateY(103%);transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility 0s .32s}
+#sheet.open{visibility:visible;transform:none;transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility 0s}
+.sh{max-width:560px;margin:0 auto;padding:calc(var(--st) + 8px) 18px calc(var(--sb) + 160px)}
+.shbar{display:flex;justify-content:flex-end;min-height:46px;align-items:center}
+.close{min-height:42px;padding:0 4px;color:var(--steel);font-weight:700;font-size:15px}
+.sh .media{border-radius:20px}
+.vnote{margin-top:12px;padding-inline-start:12px;box-shadow:inset -2px 0 0 var(--c);color:var(--steel);font-size:13.5px;line-height:1.6}
+.sh h2{margin-top:16px;font-size:24px;font-weight:800;line-height:1.45}
+.sh .dose{font-size:16px}
+.sh h3{margin-top:20px;font-size:15px;color:var(--steel);font-weight:700}
+.cues{margin:6px 0 0;padding-inline-start:20px}
+.cues li{margin:5px 0}
+.alt{margin-top:14px;font-size:14.5px;color:var(--steel)}
+.alt b{color:var(--chalk);font-weight:700}
+.sh .sets{gap:12px;margin-top:14px}
+.sh .set{width:46px;height:46px}
+.sh .btn.wide{margin-top:22px}
+
+/* timer */
+#timer{position:fixed;z-index:40;left:12px;right:12px;bottom:calc(var(--sb) + 76px);max-width:536px;margin:0 auto;display:none;align-items:center;gap:10px;padding:12px 14px;border-radius:20px;background:var(--mat2);box-shadow:0 14px 36px rgba(0,0,0,.42);overflow:hidden}
+#timer.show{display:flex}
+#timer .prog{position:absolute;top:0;right:0;left:0;height:4px;background:var(--c);transform-origin:right center}
+#timer .tt{flex:1;min-width:0}
+#timer .lbl{font-size:13.5px;color:var(--steel);line-height:1.35}
+#timer .clock{font-size:36px;line-height:1.05;direction:ltr;unicode-bidi:isolate;text-align:right}
+#timer .tb{min-height:42px;padding:0 14px;border-radius:999px;background:var(--mat);font-size:14px;font-weight:700;white-space:nowrap}
+#timer.done{background:var(--c);color:var(--on)}
+#timer.done .lbl{color:inherit;opacity:.85}
+#timer.done .tb{background:rgba(0,0,0,.14)}
+
+/* tabs */
+#tabs{position:fixed;z-index:20;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(3,1fr);padding:6px 8px calc(var(--sb) + 4px);background:rgba(35,40,45,.94);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+.tab{display:flex;flex-direction:column;align-items:center;gap:1px;min-height:52px;padding:6px 0 2px;color:var(--steel);font-size:12.5px;font-weight:700;text-align:center}
+.tab svg{width:25px;height:25px}
+.tab[aria-current="page"]{color:var(--chalk)}
+
+#toast{position:fixed;z-index:50;left:16px;right:16px;top:calc(var(--st) + 12px);max-width:528px;margin:0 auto;padding:12px 16px;border-radius:14px;background:var(--chalk);color:var(--hole);font-weight:700;font-size:15px;line-height:1.6;transform:translateY(-160%);transition:transform .25s ease}
+#toast.show{transform:none}
+
+/* reading pages */
+.ptitle{font-size:32px}
+.lead{margin-top:4px;color:var(--steel);font-size:15px}
+.dl{margin:16px 0 0;border-top:1px solid var(--line)}
+.dl div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.dl dt{color:var(--steel);font-size:15px}
+.dl dd{margin:0;font-weight:800;font-size:17px;text-align:left}
+.meal{padding:16px 0;border-bottom:1px solid var(--line)}
+.meal h3{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:18px;font-weight:800}
+.meal h3 small{color:var(--steel);font-size:13px;font-weight:500;white-space:nowrap}
+.meal p{margin-top:6px}
+.meal .or{margin-top:8px;color:var(--steel);font-size:14.5px}
+.meal .or b{color:var(--chalk);font-weight:700}
+.prose h2{margin:32px 0 6px;font-size:20px;font-weight:800;line-height:1.5}
+.prose p{margin:6px 0}
+.prose ul{margin:6px 0;padding-inline-start:20px}
+.prose li{margin:6px 0}
+.note{color:var(--steel);font-size:14px}
+.warn{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--mat);box-shadow:inset 3px 0 0 #D7263D}
+table.wk3{width:100%;border-collapse:collapse;margin-top:8px;font-size:15px}
+table.wk3 th,table.wk3 td{padding:10px 4px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+table.wk3 th{color:var(--steel);font-weight:700;font-size:13.5px}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.stepper{display:flex;gap:8px}
+.stepper button{width:44px;height:44px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--line);font-size:22px;font-weight:700;display:grid;place-items:center}
+.prose .btn{margin-top:14px}
+.credits li{font-size:13.5px;color:var(--steel)}
+.credits a{color:var(--chalk)}
+
+@media (prefers-reduced-motion:reduce){#sheet,#sheet.open,#toast{transition:none}.btn:active{transform:none}}
+</style>
+</head>
+<body>
+<main id="app" aria-live="off"></main>
+
+<div id="sheet" role="dialog" aria-modal="true" aria-label="جزئیات حرکت"></div>
+
+<div id="timer">
+  <span class="prog"></span>
+  <div class="tt"><div class="lbl" role="status">استراحت</div><div class="clock disp" aria-hidden="true">۰:۰۰</div></div>
+  <button class="tb" data-act="t+" id="tAdd">+۱۵ ثانیه</button>
+  <button class="tb" data-act="tskip" id="tSkip">رد کن</button>
+</div>
+
+<nav id="tabs" aria-label="بخش‌ها">
+  <button class="tab" data-act="tab" data-tab="train">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.2v5.6M20.5 9.2v5.6M6.5 12h11"/></svg>
+    تمرین
+  </button>
+  <button class="tab" data-act="tab" data-tab="food">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.5h17a8.5 8.5 0 0 1-17 0z"/><path d="M8.5 8.2c0-1.4 1-1.9 1-3.3M12.5 8.2c0-1.4 1-1.9 1-3.3"/></svg>
+    تغذیه
+  </button>
+  <button class="tab" data-act="tab" data-tab="guide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M4 6.5h11M4 12h11M4 17.5h11"/><circle cx="19.5" cy="6.5" r="1.25" fill="currentColor" stroke="none"/><circle cx="19.5" cy="12" r="1.25" fill="currentColor" stroke="none"/><circle cx="19.5" cy="17.5" r="1.25" fill="currentColor" stroke="none"/></svg>
+    راهنما
+  </button>
+</nav>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------- helpers ---------- */
+const FA = '۰۱۲۳۴۵۶۷۸۹';
+const fa = x => String(x).replace(/[0-9]/g, d => FA[d]);
+const DAY = 864e5;
+const $ = s => document.querySelector(s);
+const app = $('#app'), sheet = $('#sheet'), timerEl = $('#timer'), toastEl = $('#toast');
+
+const PLATE = {
+  blue:   ['#2F6FDB', '#FFFFFF'],
+  red:    ['#D7263D', '#FFFFFF'],
+  yellow: ['#F2C230', '#1B1F23'],
+  green:  ['#2F9E5F', '#FFFFFF'],
+  white:  ['#E8E7E1', '#1B1F23'],
+  gray:   ['#8D979F', '#1B1F23']
+};
+const pv = p => `--c:${PLATE[p][0]};--on:${PLATE[p][1]}`;
+
+const ICON = {
+  fwd: '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>',
+  back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>'
+};
+
+/* ---------- videos ---------- */
+// Clip files live in v/<name>.mp4 with a poster at v/<name>.jpg.
+// Clip files live in v/<name>.mp4 with a poster at v/<name>.jpg; the value is the clip's width / height.
+const VIDEOS = {
+  'chest-press': 4/3, 'cable-row': 4/3, 'incline-db-press': 1, 'lat-pulldown': 1, 'rope-pushdown': 1, 'db-curl': 1,
+  'leg-press': 4/3, 'leg-extension': 1, 'glute-bridge': 4/3, 'calf-raise': 1,
+  'db-shoulder-press': 1, 'close-pulldown': 1, 'db-bench': 4/3, 'db-row': 1, 'lateral-raise': 4/3,
+  'cat-camel': 4/3, 'side-plank': 16/9, 'treadmill': 4/3, 'bike': 4/3
+};
+const hasVid = v => !!v && Object.prototype.hasOwnProperty.call(VIDEOS, v);
+const PX = (slug, id) => `https://www.pexels.com/video/${slug}-${id}/`;
+const MX = id => `https://mixkit.co/free-stock-video/x-${id}/`;
+const CREDITS = [
+  {fa:'پرس سینه با دستگاه', src:'Mixkit', url:MX(100534)},
+  {fa:'روئینگ سیم‌کش نشسته', src:'Mixkit', url:MX(100550)},
+  {fa:'پرس بالاسینه با دمبل', src:'Pexels', url:PX('intense-weight-training-on-bench-with-dumbbells', 29569378)},
+  {fa:'زیربغل سیم‌کش از جلو', src:'Mixkit', url:MX(100549)},
+  {fa:'پشت بازو سیم‌کش', src:'Pexels', url:PX('a-man-working-out-inside-the-gym', 5319433)},
+  {fa:'جلو بازو با دمبل', src:'Pexels', url:PX('man-doing-arm-workout-at-gym', 5319426)},
+  {fa:'پرس پا', src:'Pexels', url:PX('lifting-heavy-weights', 17189849)},
+  {fa:'جلو پا با دستگاه', src:'Pexels', url:PX('gym-workout-motivation-with-leg-extensions', 32709558)},
+  {fa:'پل باسن', src:'Pexels', url:PX('man-working-out-at-the-park', 6022668)},
+  {fa:'ساق پا', src:'Pexels', url:PX('intense-calf-workout-in-gym-setting', 32115656)},
+  {fa:'پرس سرشانه با دمبل', src:'Pexels', url:PX('a-man-doing-dumbbell-shoulder-press', 4367541)},
+  {fa:'زیربغل سیم‌کش دست‌جمع', src:'Pexels', url:PX('intense-gym-workout-with-lat-pulldown', 40342562)},
+  {fa:'پرس سینه با دمبل', src:'Pexels', url:PX('intense-dumbbell-press-workout-in-home-gym', 33261218)},
+  {fa:'روئینگ تک‌دست با دمبل', src:'Pexels', url:PX('a-man-working-out-using-dumbbell', 5319429)},
+  {fa:'نشر جانب', src:'Pexels', url:PX('a-man-working-out-using-dumbbell', 5319102)},
+  {fa:'گربه و شتر', src:'Pexels', url:PX('a-man-stretching-on-a-yoga-mat', 6298132)},
+  {fa:'پلانک پهلو', src:'Pexels', url:PX('a-man-exercising', 6023265)},
+  {fa:'تردمیل', src:'Pexels', url:PX('a-man-doing-leg-workout-on-the-treadmill', 4367637)},
+  {fa:'دوچرخهٔ ثابت', src:'Pexels', url:PX('a-person-riding-an-exercise-bike-in-a-gym', 27861390)}
+];
+const APP_VERSION = '۱٫۰';
+
+/* ---------- program ---------- */
+const EX = {
+  'chest-press': {fa:'پرس سینه با دستگاه', en:'Machine chest press', v:'chest-press', reps:'۸ تا ۱۲ تکرار', rest:120,
+    cues:['صندلی را طوری تنظیم کن که دسته‌ها هم‌ارتفاع وسط سینه باشند.','کف پاها روی زمین و کمر به پشتی؛ کمر را قوس نده.','بالای حرکت آرنج‌ها را کامل قفل نکن.'],
+    alt:'پرس سینه با دمبل روی میز تخت'},
+  'cable-row': {fa:'قایقی نشسته با سیم‌کش', en:'Seated cable row', v:'cable-row', reps:'۱۰ تا ۱۲ تکرار', rest:120,
+    cues:['زانوها کمی خم و سینه بالا.','دسته را تا پایین شکم بکش و کتف‌ها را به هم نزدیک کن.','تنه ثابت بماند؛ عقب و جلو تاب نخور.'],
+    alt:'روئینگ با تکیهٔ سینه روی میز شیب‌دار'},
+  'incline-db-press': {fa:'پرس بالاسینه با دمبل', en:'Incline dumbbell press', v:'incline-db-press', reps:'۱۰ تا ۱۲ تکرار', rest:90,
+    cues:['شیب نیمکت حدود ۳۰ درجه.','آرنج‌ها حدود ۴۵ درجه از بدن فاصله داشته باشند.','دمبل‌ها را آرام تا کنار سینه پایین بیاور.']},
+  'lat-pulldown': {fa:'زیربغل سیم‌کش از جلو', en:'Lat pulldown', v:'lat-pulldown', reps:'۱۰ تا ۱۲ تکرار', rest:90,
+    cues:['دست‌ها کمی بازتر از عرض شانه.','میله را تا بالای سینه بکش و آرنج‌ها را به سمت پهلو ببر.','به عقب خم نشو و تاب نخور.']},
+  'rope-pushdown': {fa:'پشت بازو سیم‌کش با طناب', en:'Rope pushdown', v:'rope-pushdown', reps:'۱۲ تا ۱۵ تکرار', rest:60,
+    cues:['آرنج‌ها چسبیده به پهلو و ثابت.','فقط ساعد حرکت کند.','پایین حرکت، سر طناب‌ها را کمی از هم باز کن.']},
+  'db-curl': {fa:'جلو بازو با دمبل، نشسته', en:'Seated dumbbell curl', v:'db-curl', reps:'۱۰ تا ۱۵ تکرار', rest:60,
+    cues:['صاف بنشین و آرنج‌ها را کنار بدن نگه دار.','بدون کمک گرفتن از کمر و تاب دادن.','پایین آوردن آهسته.']},
+  'leg-press': {fa:'پرس پا', en:'Leg press', v:'leg-press', reps:'۱۰ تا ۱۵ تکرار', rest:120,
+    cues:['کمر و لگن کامل به پشتی بچسبند.','تا جایی پایین برو که لگن از صندلی جدا نشود.','بالا زانوها را قفل نکن؛ زانوها هم‌جهت پنجه‌ها.']},
+  'leg-curl': {fa:'پشت پا با دستگاه', en:'Leg curl', v:'leg-curl', reps:'۱۰ تا ۱۵ تکرار', rest:90,
+    cues:['محور دستگاه هم‌راستای زانو باشد.','لگن روی تشک بماند و کمر قوس نگیرد.','پایین آوردن آهسته، حدود ۳ ثانیه.']},
+  'leg-extension': {fa:'جلو پا با دستگاه', en:'Leg extension', v:'leg-extension', reps:'۱۲ تا ۱۵ تکرار', rest:90,
+    cues:['محور دستگاه کنار زانو باشد.','بالا ۱ ثانیه مکث کن.','آهسته پایین بیاور؛ وزنه را رها نکن.']},
+  'glute-bridge-w': {fa:'پل باسن با وزنه', en:'Weighted glute bridge', v:'glute-bridge', vn:'ویدیو بدون وزنه است؛ تو دمبل یا صفحه را روی لگن بگذار.', reps:'۱۲ تا ۱۵ تکرار', rest:90,
+    cues:['دمبل یا صفحه روی لگن، کف پاها نزدیک باسن.','با فشار پاشنه‌ها بالا بیا و بالا باسن را سفت کن.','دنده‌ها پایین؛ کمر قوس نگیرد.']},
+  'calf-raise': {fa:'ساق پا', en:'Calf raise', v:'calf-raise', reps:'۱۲ تا ۱۵ تکرار', rest:60,
+    cues:['پایین، پاشنه کامل پایین برود تا ساق کشیده شود.','روی پنجه بالا برو و ۱ ثانیه مکث کن.','ایستاده، روی پرس پا یا نشسته؛ هر کدام آزاد بود.']},
+  'pallof-press': {fa:'پالوف پرس با سیم‌کش', en:'Pallof press', v:'pallof-press', reps:'۱۰ تکرار برای هر سمت', rest:60,
+    cues:['پهلو به دستگاه بایست و دسته را جلوی سینه بگیر.','دست‌ها را صاف جلو ببر و ۲ ثانیه نگه دار.','شکم سفت؛ نگذار سیم تنه را بچرخاند.']},
+  'db-shoulder-press': {fa:'پرس سرشانه با دمبل، نشسته', en:'Seated dumbbell shoulder press', v:'db-shoulder-press', reps:'۸ تا ۱۲ تکرار', rest:120,
+    cues:['پشتی صاف یا کمی شیب‌دار و کمر چسبیده به آن.','دمبل‌ها از کنار گوش تا بالای سر.','کمر را قوس نده؛ ایستاده نزن.']},
+  'close-pulldown': {fa:'زیربغل سیم‌کش دست‌جمع', en:'Close-grip lat pulldown', v:'close-pulldown', vn:'در ویدیو میلهٔ صاف با دست‌های نزدیک است؛ با دستهٔ V هم حرکت همین است.', reps:'۸ تا ۱۲ تکرار', rest:120,
+    cues:['دستهٔ V را بگیر.','سینه بالا؛ دسته را تا بالای سینه بکش.','بدون پرتاب تنه به عقب.']},
+  'db-bench': {fa:'پرس سینه با دمبل روی میز تخت', en:'Dumbbell bench press', v:'db-bench', reps:'۱۰ تا ۱۲ تکرار', rest:90,
+    cues:['کتف‌ها جمع و روی نیمکت.','دمبل‌ها تا کنار سینه پایین بیایند.','کف پاها روی زمین؛ باسن از نیمکت بلند نشود.'],
+    alt:'پرس سینه با دستگاه'},
+  'db-row': {fa:'روئینگ تک‌دست با دمبل', en:'One-arm dumbbell row', v:'db-row', vn:'در ویدیو فقط دست روی نیمکت است؛ زانو را هم روی نیمکت بگذاری کمرت راحت‌تر است.', reps:'۱۰ تا ۱۲ تکرار برای هر دست', rest:60,
+    cues:['دست و زانوی سمت مخالف روی نیمکت؛ کمر صاف.','دمبل را به سمت لگن بکش، نه سینه.','تنه نچرخد.']},
+  'lateral-raise': {fa:'نشر جانب با دمبل، نشسته', en:'Seated lateral raise', v:'lateral-raise', vn:'ویدیو ایستاده است؛ مسیر دست‌ها همین است. تو نشسته بزن.', reps:'۱۲ تا ۱۵ تکرار', rest:60,
+    cues:['وزنهٔ سبک و آرنج کمی خم.','دمبل‌ها تا هم‌سطح شانه، نه بالاتر.','تنه تاب نخورد.']},
+  'face-pull': {fa:'فیس‌پول با سیم‌کش', en:'Face pull', v:'face-pull', reps:'۱۲ تا ۱۵ تکرار', rest:60,
+    cues:['قرقره هم‌سطح صورت یا کمی بالاتر.','طناب را به سمت پیشانی بکش و آرنج‌ها بالا بمانند.','آخر حرکت کتف‌ها را به هم نزدیک کن.']},
+  'hip-thrust': {fa:'هیپ تراست روی نیمکت', en:'Hip thrust', v:'hip-thrust', reps:'۸ تا ۱۲ تکرار', rest:120,
+    cues:['لبهٔ نیمکت زیر کتف‌ها و کف پاها روی زمین.','با فشار پاشنه‌ها بالا بیا تا تنه صاف شود، نه بیشتر.','چانه و دنده‌ها پایین؛ کمر قوس نگیرد.'],
+    alt:'پل باسن روی زمین با وزنه'},
+  'high-leg-press': {fa:'پرس پا با پای بالاتر', en:'High-foot leg press', v:'leg-press', vn:'مثل ویدیو، فقط پاها را بالاتر روی صفحه بگذار.', reps:'۱۰ تا ۱۵ تکرار', rest:120,
+    cues:['پاها را بالاتر از همیشه روی صفحه بگذار.','فشار را از پاشنه‌ها بده.','لگن از صندلی جدا نشود.']},
+  'pull-through': {fa:'پول‌ترو با سیم‌کش', en:'Cable pull-through', v:'pull-through', reps:'۱۲ تا ۱۵ تکرار', rest:90,
+    cues:['پشت به دستگاه بایست و طناب را از بین پاها بگیر.','از لگن خم شو و باسن را عقب ببر؛ کمر صاف.','با سفت کردن باسن بایست؛ به عقب خم نشو.']},
+  'farmer-carry': {fa:'راه‌رفتن کشاورز با دو دمبل', en:"Farmer's carry", v:'farmer-carry', reps:'۳۰ متر', rest:60,
+    cues:['دو دمبل سنگین کنار بدن.','قد بلند، شانه‌ها پایین، شکم سفت.','قدم‌های کوتاه و آرام.']},
+
+  'cat-camel': {fa:'گربه و شتر', en:'Cat-camel', v:'cat-camel',
+    cues:['چهار دست و پا؛ آرام پشت را گرد و بعد گود کن.','فقط در دامنهٔ راحت؛ به انتهای حرکت فشار نیاور.']},
+  'dead-bug': {fa:'دد باگ', en:'Dead bug', v:'dead-bug',
+    cues:['به پشت بخواب، زانوها ۹۰ درجه بالا و دست‌ها رو به سقف.','دست و پای مخالف را آرام دور کن و برگردان.','گودی کمر همیشه به زمین چسبیده بماند.']},
+  'bird-dog': {fa:'برد داگ', en:'Bird dog', v:'bird-dog',
+    cues:['چهار دست و پا؛ دست و پای مخالف را صاف کن.','۵ ثانیه نگه دار؛ لگن نچرخد.','پا بالاتر از خط تنه نرود.']},
+  'side-plank': {fa:'پلانک پهلو روی زانو', en:'Side plank from knees', v:'side-plank', vn:'ویدیو نسخهٔ سخت‌ترِ روی پا است؛ تو روی زانو بزن.',
+    cues:['روی آرنج و زانوها؛ از سر تا زانو یک خط صاف.','لگن را بالا نگه دار و عادی نفس بکش.']},
+  'glute-bridge': {fa:'پل باسن بدون وزنه', en:'Glute bridge', v:'glute-bridge',
+    cues:['اول لگن را کمی به عقب بچرخان، بعد بالا بیا.','بالا باسن را سفت کن؛ کمر قوس نگیرد.']},
+  'hip-flexor': {fa:'کشش جلوی لگن', en:'Half-kneeling hip flexor stretch', v:'hip-flexor',
+    cues:['یک زانو روی زمین و پای دیگر جلو.','باسنِ پای عقب را سفت کن و کمی جلو برو.','کمر قوس نگیرد.']},
+
+  'treadmill': {fa:'تردمیل شیب‌دار', en:'Incline treadmill walk', v:'treadmill', reps:'شیب ۳ تا ۶ درصد، پیاده‌روی تند',
+    cues:['دسته‌ها را نگیر و به جلو خم نشو.','نفست تند شود ولی بتوانی جملهٔ کامل بگویی.','۲ دقیقهٔ آخر آهسته‌تر.']},
+  'bike': {fa:'دوچرخهٔ ثابت', en:'Stationary bike', v:'bike', reps:'مقاومت متوسط',
+    cues:['زین را هم‌ارتفاع لگن تنظیم کن.','پایین رکاب، زانو کمی خم بماند.','کمر صاف؛ روی فرمان خم نشو.']}
+};
+
+const SESSIONS = {
+  upperA: {name:'بالاتنه A', plate:'blue',   sub:'سینه، پشت، بازو',
+    items:['chest-press','cable-row','incline-db-press','lat-pulldown','rope-pushdown','db-curl']},
+  lowerA: {name:'پایین‌تنه A', plate:'red',  sub:'پرس پا، پشت و جلو پا، باسن',
+    items:['leg-press','leg-curl','leg-extension','glute-bridge-w','calf-raise','pallof-press']},
+  upperB: {name:'بالاتنه B', plate:'yellow', sub:'سرشانه، پشت، سینه',
+    items:['db-shoulder-press','close-pulldown','db-bench','db-row','lateral-raise','face-pull']},
+  lowerB: {name:'پایین‌تنه B', plate:'green', sub:'باسن، پرس پا، پشت پا',
+    items:['hip-thrust','high-leg-press','pull-through','leg-curl','calf-raise','farmer-carry']}
+};
+const ORDER = ['upperA','lowerA','upperB','lowerB'];
+
+const BACK = [
+  {id:'cat-camel',    amt:'۸ تکرار آهسته'},
+  {id:'dead-bug',     amt:'۸ تکرار برای هر سمت'},
+  {id:'bird-dog',     amt:'۶ تکرار برای هر سمت، هر بار ۵ ثانیه مکث'},
+  {id:'side-plank',   amt:'۲۰ تا ۳۰ ثانیه برای هر سمت', sec:30, tl:'پلانک پهلو'},
+  {id:'glute-bridge', amt:'۱۲ تکرار'},
+  {id:'hip-flexor',   amt:'۳۰ ثانیه برای هر سمت', sec:30, tl:'کشش جلوی لگن'}
+];
+const CARDIO = ['treadmill','bike'];
+
+/* ---------- storage (falls back to memory) ---------- */
+const mem = {};
+const S = {
+  get(k, d) {
+    if (k in mem) return mem[k];
+    try { const v = localStorage.getItem('gym:' + k); if (v !== null) return (mem[k] = JSON.parse(v)); } catch (e) {}
+    return d;
+  },
+  set(k, v) { mem[k] = v; try { localStorage.setItem('gym:' + k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { delete mem[k]; try { localStorage.removeItem('gym:' + k); } catch (e) {} }
+};
+
+function week() {
+  let st = S.get('start', 0);
+  if (!st) { st = Date.now(); S.set('start', st); }
+  const w = Math.floor((Date.now() - st) / (7 * DAY)) + 1 + S.get('wOff', 0);
+  return Math.max(1, w);
+}
+const setsFor = w => w <= 2 ? 2 : w <= 12 ? 3 : w === 13 ? 2 : 3;
+const cardioText = w => w <= 2 ? '۲۰ تا ۳۰ دقیقه' : '۳۰ دقیقه';
+const cardioMin = w => w <= 2 ? 20 : 30;
+const weekLabel = w => w <= 12 ? `هفتهٔ ${fa(w)} از ۱۲` : w === 13 ? 'هفتهٔ ۱۳، هفتهٔ سبک' : `هفتهٔ ${fa(w)}`;
+const restText = s => s >= 120 && s % 60 === 0 ? fa(s / 60) + ' دقیقه' : fa(s) + ' ثانیه';
+
+function dayKey() { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+function setsMap() {
+  let m = S.get('sets', null);
+  if (!m || m.day !== dayKey()) { m = {day: dayKey(), v: {}}; S.set('sets', m); }
+  return m;
+}
+const getDone = (ctx, id) => setsMap().v[ctx + ':' + id] || 0;
+function setDone(ctx, id, n) { const m = setsMap(); m.v[ctx + ':' + id] = n; S.set('sets', m); }
+
+const getW = id => (S.get('w', {})[id] || '');
+function normNum(s) {
+  return String(s)
+    .replace(/[۰-۹]/g, d => FA.indexOf(d))
+    .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
+    .replace(/[٫,]/g, '.')
+    .replace(/[^0-9.]/g, '')
+    .slice(0, 6);
+}
+function setW(id, val) {
+  const w = S.get('w', {}); const v = normNum(val);
+  if (v) w[id] = v; else delete w[id];
+  S.set('w', w); return v;
+}
+
+const hist = () => S.get('hist', []);
+function nextSid() {
+  const h = hist(); if (!h.length) return ORDER[0];
+  const i = ORDER.indexOf(h[h.length - 1].s);
+  return ORDER[(i + 1) % ORDER.length];
+}
+function relDays(t) {
+  const a = new Date(); a.setHours(0, 0, 0, 0);
+  const b = new Date(t); b.setHours(0, 0, 0, 0);
+  const d = Math.round((a - b) / DAY);
+  return d <= 0 ? 'امروز' : d === 1 ? 'دیروز' : fa(d) + ' روز پیش';
+}
+
+/* ---------- pieces ---------- */
+function media(v) {
+  if (hasVid(v)) return `<video muted playsinline loop preload="none" disablepictureinpicture poster="v/${v}.jpg" data-src="v/${v}.mp4"></video>`;
+  return '<span class="ph"><i></i>ویدیو در نسخهٔ بعد</span>';
+}
+function dots(n, done, id, ctx) {
+  let h = '';
+  for (let k = 0; k < n; k++) {
+    h += `<button class="set${k < done ? ' done' : ''}" data-act="set" data-id="${id}" data-ctx="${ctx}" data-k="${k}" aria-label="ست ${fa(k + 1)}${k < done ? '، انجام شد' : ''}" aria-pressed="${k < done}"></button>`;
+  }
+  return h;
+}
+function setsBox(n, id, ctx) {
+  return `<div class="sets" data-id="${id}" data-ctx="${ctx}" data-n="${n}" role="group" aria-label="ست‌ها">${dots(n, getDone(ctx, id), id, ctx)}</div>`;
+}
+function wtBox(id) {
+  const w = getW(id);
+  return `<label class="wt">وزنه <input type="text" inputmode="decimal" autocomplete="off" data-wt="${id}" value="${w ? fa(w) : ''}" placeholder="—"> کیلو</label>`;
+}
+
+/* ---------- views ---------- */
+const state = {tab: 'train', view: 'home', sid: null, from: null};
+
+function viewHome() {
+  const w = week(), h = hist(), sid = nextSid(), s = SESSIONS[sid];
+  const last = h[h.length - 1];
+  const strip = s.items.map(id => {
+    const v = EX[id].v;
+    return hasVid(v) ? `<img src="v/${v}.jpg" alt="" decoding="async">` : '<i></i>';
+  }).join('');
+  const rows = ORDER.map(id => {
+    const x = SESSIONS[id];
+    return `<button class="row" style="${pv(x.plate)}" data-act="session" data-sid="${id}">
+      <span class="plate" aria-hidden="true"></span>
+      <span class="t"><b>${x.name}${id === sid ? '<span class="pill">بعدی</span>' : ''}</b><small>${x.sub}</small></span>${ICON.fwd}</button>`;
+  }).join('');
+  return `
+  <header class="top"><h1 class="disp brand">تمرین</h1><p class="wk">${weekLabel(w)}</p></header>
+  <section class="hero" style="${pv(s.plate)}" aria-label="جلسهٔ بعدی">
+    <span class="plate" aria-hidden="true"></span>
+    <div>
+      <p class="kick">جلسهٔ بعدی</p>
+      <h2 class="disp sname">${s.name}</h2>
+      <p class="meta">۶ حرکت، از هر کدام ${fa(setsFor(w))} ست<br>بعدش ${cardioText(w)} هوازی</p>
+      <button class="btn" data-act="session" data-sid="${sid}">شروع جلسه</button>
+    </div>
+    <div class="strip" aria-hidden="true">${strip}</div>
+  </section>
+  ${last ? `<p class="last">آخرین جلسه: ${SESSIONS[last.s].name}، ${relDays(last.t)}</p>` : ''}
+  <h2 class="sec">همهٔ جلسه‌ها</h2>
+  <div>${rows}</div>
+  <h2 class="sec">کنار تمرین</h2>
+  <div>
+    <button class="row" style="${pv('white')}" data-act="backr">
+      <span class="plate" aria-hidden="true"></span>
+      <span class="t"><b>روتین کمر</b><small>۶ حرکت، حدود ۶ دقیقه؛ اول هر جلسه</small></span>${ICON.fwd}</button>
+    <button class="row" style="${pv('gray')}" data-act="cardio">
+      <span class="plate" aria-hidden="true"></span>
+      <span class="t"><b>هوازی</b><small>تردمیل شیب‌دار یا دوچرخه، ${cardioText(w)}</small></span>${ICON.fwd}</button>
+  </div>`;
+}
+
+function exRow(id, i, ctx, n) {
+  const e = EX[id];
+  return `<li class="ex">
+    <button class="media" data-act="ex" data-id="${id}" data-ctx="${ctx}" aria-label="ویدیو و نکته‌های ${e.fa}">${media(e.v)}<span class="num">${fa(i + 1)}</span></button>
+    <div class="info">
+      <h3><button data-act="ex" data-id="${id}" data-ctx="${ctx}">${e.fa}</button></h3>
+      <p class="en" dir="ltr" lang="en">${e.en}</p>
+      <p class="dose">${fa(n)} ست، ${e.reps}<small>استراحت ${restText(e.rest)}</small></p>
+      ${setsBox(n, id, ctx)}
+      ${wtBox(id)}
+    </div>
+  </li>`;
+}
+
+function viewSession(sid) {
+  const s = SESSIONS[sid], w = week(), n = setsFor(w);
+  return `
+  <div class="nav"><button class="backbtn" data-act="home">${ICON.back}تمرین</button></div>
+  <header class="shead" style="${pv(s.plate)}">
+    <span class="plate" aria-hidden="true"></span>
+    <div><h1 class="disp sname">${s.name}</h1><p class="meta">${weekLabel(w)}، از هر حرکت ${fa(n)} ست</p></div>
+  </header>
+  <div style="${pv(s.plate)}">
+    <button class="row" style="${pv('white')}" data-act="backr" data-from="${sid}">
+      <span class="plate" aria-hidden="true"></span>
+      <span class="t"><b>اول: روتین کمر</b><small>۶ حرکت، حدود ۶ دقیقه</small></span>${ICON.fwd}</button>
+    <ol class="exlist">${s.items.map((id, i) => exRow(id, i, sid, n)).join('')}</ol>
+    <button class="row endrow" style="${pv('gray')}" data-act="cardio" data-from="${sid}">
+      <span class="plate" aria-hidden="true"></span>
+      <span class="t"><b>آخر: هوازی</b><small>${cardioText(w)}، تردمیل یا دوچرخه</small></span>${ICON.fwd}</button>
+    <button class="btn wide finish" data-act="finish" data-sid="${sid}">جلسه تمام شد</button>
+  </div>`;
+}
+
+function upBtn() {
+  return state.from
+    ? `<button class="backbtn" data-act="up">${ICON.back}${SESSIONS[state.from].name}</button>`
+    : `<button class="backbtn" data-act="home">${ICON.back}تمرین</button>`;
+}
+
+function viewBack() {
+  const items = BACK.map((b, i) => {
+    const e = EX[b.id];
+    return `<li class="ex">
+      <button class="media" data-act="ex" data-id="${b.id}" data-ctx="back" aria-label="ویدیو و نکته‌های ${e.fa}">${media(e.v)}<span class="num">${fa(i + 1)}</span></button>
+      <div class="info">
+        <h3><button data-act="ex" data-id="${b.id}" data-ctx="back">${e.fa}</button></h3>
+        <p class="en" dir="ltr" lang="en">${e.en}</p>
+        <p class="dose">${b.amt}</p>
+        ${b.sec ? `<button class="mini" data-act="timer" data-sec="${b.sec}" data-label="${b.tl}">تایمر ${fa(b.sec)} ثانیه</button>` : ''}
+      </div>
+    </li>`;
+  }).join('');
+  return `
+  <div class="nav">${upBtn()}</div>
+  <header class="shead" style="${pv('white')}">
+    <span class="plate" aria-hidden="true"></span>
+    <div><h1 class="disp sname">روتین کمر</h1><p class="meta">اول هر جلسه ۱ دور؛ روزهای استراحت ۲ دور</p></div>
+  </header>
+  <div style="${pv('white')}">
+    <ol class="exlist">${items}</ol>
+    <button class="btn wide finish" data-act="finish-back">روتین تمام شد</button>
+  </div>`;
+}
+
+function viewCardio() {
+  const w = week(), min = cardioMin(w);
+  const items = CARDIO.map((id, i) => {
+    const e = EX[id];
+    return `<li class="ex">
+      <button class="media" data-act="ex" data-id="${id}" data-ctx="cardio" aria-label="ویدیو و نکته‌های ${e.fa}">${media(e.v)}</button>
+      <div class="info">
+        <h3><button data-act="ex" data-id="${id}" data-ctx="cardio">${e.fa}</button></h3>
+        <p class="en" dir="ltr" lang="en">${e.en}</p>
+        <p class="dose">${e.reps}</p>
+      </div>
+    </li>`;
+  }).join('');
+  return `
+  <div class="nav">${upBtn()}</div>
+  <header class="shead" style="${pv('gray')}">
+    <span class="plate" aria-hidden="true"></span>
+    <div><h1 class="disp sname">هوازی</h1><p class="meta">بعد از وزنه، ${cardioText(w)}؛ یکی را انتخاب کن یا نصف‌نصف بزن</p></div>
+  </header>
+  <div style="${pv('gray')}">
+    <ol class="exlist">${items}</ol>
+    <div class="prose">
+      <ul>
+        <li>شدت: نفست تند شود ولی بتوانی جملهٔ کامل بگویی؛ ضربان حدود ۱۱۰ تا ۱۳۵.</li>
+        <li>اگر ۳۰ دقیقه سخت بود، با ۲۰ دقیقه شروع کن و هر هفته ۵ دقیقه اضافه کن.</li>
+        <li>یک پیاده‌روی ۳۰ تا ۴۰ دقیقه‌ای هم آخر هفته داری.</li>
+      </ul>
+    </div>
+    <button class="btn wide finish" data-act="timer" data-sec="${min * 60}" data-label="هوازی">شروع تایمر ${fa(min)} دقیقه</button>
+  </div>`;
+}
+
+function viewFood() {
+  const meals = [
+    ['صبحانه', '۴۶۰ کیلوکالری، ۲۶ گرم پروتئین',
+     'املت یا نیمروی ۳ تخم‌مرغ با ۱ قاشق چای‌خوری روغن، نان سنگک ۲ کف دست (۶۰ گرم)، خیار و گوجه، چای',
+     'نان سنگک ۲ کف دست، پنیر ۶۰ گرم، ۱ پیمانه وی با آب، خیار و گوجه'],
+    ['ناهار، بعد از تمرین', '۷۳۰ کیلوکالری، ۶۸ گرم پروتئین',
+     'جوجه‌کباب ۲۰۰ گرم، برنج پخته ۲۰۰ گرم، سالاد با آبلیمو و ۱ قاشق چای‌خوری روغن زیتون، گوجهٔ کبابی',
+     '۱ سیخ کوبیده و ۱۰۰ گرم جوجه با ۱۵۰ گرم برنج و سالاد؛ یا خورشت کم‌روغن با ۱۲۰ گرم گوشت، ۱۵۰ گرم برنج و سالاد'],
+    ['عصرانه', '۳۳۵ کیلوکالری، ۲۸ گرم پروتئین',
+     '۱ پیمانه وی با آب، ۱ سیب، ۲۰ گرم مغز (یک مشت کوچک)',
+     'ماست کم‌چرب ۲۵۰ گرم، ۱ میوه، ۲۰ گرم مغز'],
+    ['شام', '۵۴۰ کیلوکالری، ۴۱ گرم پروتئین',
+     '۱ قوطی تن ماهی بدون روغن، برنج پخته ۱۵۰ گرم، سالاد بزرگ با ۱ قاشق چای‌خوری روغن زیتون',
+     'جوجه ۱۵۰ گرم با نان سنگک ۲ کف دست و سالاد؛ یا ۱ کاسه عدسی با ۲ تخم‌مرغ نیمرو'],
+    ['آخر شب', '۱۶۵ کیلوکالری، ۱۲ گرم پروتئین',
+     'ماست کم‌چرب ۲۵۰ گرم با خیار',
+     '۱ لیوان شیر کم‌چرب'],
+    ['در طول روز', '۸۵ کیلوکالری',
+     '۱ پرتقال، چای با ۱ قاشق چای‌خوری عسل',
+     'هر میوهٔ فصل؛ چای بدون عسل']
+  ].map(m => `<section class="meal"><h3>${m[0]}<small>${m[1]}</small></h3><p>${m[2]}</p><p class="or"><b>یا:</b> ${m[3]}</p></section>`).join('');
+  return `
+  <h1 class="disp ptitle">تغذیه</h1>
+  <p class="lead">هر روز همین برنامه؛ روزهای بدون تمرین هم.</p>
+  <dl class="dl">
+    <div><dt>انرژی</dt><dd>حدود ۲٬۳۰۰ کیلوکالری</dd></div>
+    <div><dt>پروتئین</dt><dd>۱۷۰ گرم</dd></div>
+    <div><dt>آب</dt><dd>۲٫۵ تا ۳ لیتر</dd></div>
+  </dl>
+  <h2 class="sec">وعده‌ها</h2>
+  ${meals}
+  <div class="prose">
+    <p class="note" style="margin-top:12px">عددها تقریبی‌اند. خورشت، عدسی و ماست پروتئین کمتری دارند؛ آن روز یک پیمانه وی اضافه کن.</p>
+    <h2>قانون‌ها</h2>
+    <ul>
+      <li>هر وعده را با پروتئین شروع کن، بعد برنج یا نان.</li>
+      <li>برنج پخته: ناهار ۲۰۰ گرم و شام ۱۵۰ گرم. دو هفتهٔ اول وزنش کن تا چشمت عادت کند.</li>
+      <li>جوجه انتخاب اول است. کوبیده حداکثر ۲ بار در هفته، هر بار ۱ سیخ کنار جوجه.</li>
+      <li>تن ماهی هفته‌ای ۲ تا ۳ قوطی، روغنش را کامل خالی کن.</li>
+      <li>نوشابه و آبمیوهٔ صنعتی نه؛ عسل حداکثر ۱ قاشق چای‌خوری در روز.</li>
+      <li>یک وعدهٔ آزاد در هفته؛ یک وعده، نه یک روز.</li>
+      <li>کمتر از ۲٬۰۰۰ کیلوکالری نخور.</li>
+      <li>بیرون از خانه: یک سیخ جوجه، نصف برنج، سالاد و گوجه؛ بدون کره و نوشابه.</li>
+    </ul>
+    <h2>مکمل‌ها</h2>
+    <ul>
+      <li><b>کراتین مونوهیدرات:</b> هر روز ۳ تا ۵ گرم، هر ساعتی. با شروعش ترازو در دو هفتهٔ اول نیم تا یک کیلو بالا می‌رود که آب است، نه چربی.</li>
+      <li><b>وی:</b> ۱ پیمانه در عصرانه، فقط برای رسیدن به ۱۷۰ گرم پروتئین.</li>
+    </ul>
+  </div>`;
+}
+
+function offlineText() {
+  if (!swOK) return '';
+  if (!Object.keys(VIDEOS).length) return 'وقتی ویدیوها اضافه شوند، روی گوشی ذخیره می‌شوند تا اپ بدون اینترنت هم کار کند.';
+  const o = S.get('offline', null);
+  return o && o.n >= o.total ? 'همهٔ ویدیوها روی گوشی ذخیره شده‌اند؛ اپ بدون اینترنت هم باز می‌شود.' : 'در حال ذخیرهٔ ویدیوها روی گوشی برای استفادهٔ بدون اینترنت.';
+}
+
+function viewGuide() {
+  const w = week();
+  const credits = CREDITS.length
+    ? `<h2>منبع ویدیوها</h2><ul class="credits">${CREDITS.map(c => `<li>${c.fa}: <a href="${c.url}" target="_blank" rel="noopener">${c.src}</a></li>`).join('')}</ul>` : '';
+  return `
+  <h1 class="disp ptitle">راهنما</h1>
+  <div class="prose">
+    <h2>هر ست چقدر سنگین باشد</h2>
+    <ul>
+      <li>ست را جایی تمام کن که حس کنی ۲ تا ۳ تکرار دیگر با فرم درست می‌توانستی بزنی. هیچ ستی تا ناتوانی نرود.</li>
+      <li>پایین آوردن وزنه ۲ تا ۳ ثانیه طول بکشد؛ بدون تاب دادن و پرتاب.</li>
+      <li>قبل از دو حرکت اول هر جلسه، ۱ ست ۱۰ تکراری با نصف وزنهٔ اصلی بزن.</li>
+      <li>با زدن هر دایرهٔ ست، تایمر استراحت همان حرکت شروع می‌شود.</li>
+    </ul>
+    <h2>کی وزنه را زیاد کنم</h2>
+    <ul>
+      <li>هر وقت در همهٔ ست‌ها به سقف تکرار رسیدی و هنوز ۲ تکرار ذخیره داشتی، جلسهٔ بعد کوچک‌ترین وزنهٔ ممکن را اضافه کن.</li>
+      <li>وزنهٔ هر حرکت را در خانهٔ «وزنه» بنویس؛ دفعهٔ بعد همان‌جا می‌ماند.</li>
+    </ul>
+    <h2>۱۲ هفته</h2>
+    <table class="wk3">
+      <thead><tr><th>هفته</th><th>ست از هر حرکت</th><th>هوازی</th></tr></thead>
+      <tbody>
+        <tr><td>۱ و ۲</td><td>۲</td><td>۲۰ تا ۳۰ دقیقه</td></tr>
+        <tr><td>۳ تا ۱۲</td><td>۳</td><td>۳۰ دقیقه</td></tr>
+        <tr><td>۱۳</td><td>۲، سبک</td><td>۳۰ دقیقه؛ اندازه‌گیری دوباره</td></tr>
+      </tbody>
+    </table>
+    <p class="note">تعداد ست‌ها و دقیقه‌های هوازی را اپ خودش بر اساس هفته نشان می‌دهد.</p>
+    <h2>کمر</h2>
+    <ul>
+      <li>در همهٔ حرکت‌ها: دنده‌ها پایین، شکم کمی سفت، لگن خنثی.</li>
+      <li>فعلاً کنار بگذار: ددلیفت سنگین از زمین، اسکوات سنگین با هالتر، پرس سرشانهٔ ایستاده، درازنشست کامل و بالا آوردن هر دو پا در حالت خوابیده.</li>
+      <li>ناراحتی تا ۳ از ۱۰ که تا فردا آرام شود قابل قبول است. بیشتر از آن یعنی وزنه را کم کن یا جایگزین را بزن.</li>
+      <li>پشت میز هر ۳۰ تا ۴۵ دقیقه بلند شو و ۲ دقیقه راه برو.</li>
+      <li>کمربند برای این برنامه لازم نیست.</li>
+    </ul>
+    <p class="warn"><b>علامت خطر:</b> تیر کشیدن درد به پا، گزگز یا بی‌حسی، ضعف پا، یا اختلال در کنترل ادرار و مدفوع. در این حالت تمرین را متوقف کن و به پزشک مراجعه کن.</p>
+    <h2>هفته‌های شلوغ</h2>
+    <ul>
+      <li><b>روز شلوغ:</b> جلسهٔ ۴۰ دقیقه‌ای؛ روتین کمر، ۴ حرکت اول با ۲ ست و ۱۵ دقیقه هوازی.</li>
+      <li><b>هفتهٔ شلوغ:</b> ۲ جلسه کافی است؛ یک بالاتنه و یک پایین‌تنه با همان وزنه‌ها.</li>
+      <li><b>کف برنامه:</b> حتی ۱ جلسه در هفته با ۱ ست از هر حرکت عضله و قدرت را نگه می‌دارد، به شرط اینکه وزنه سبک نشود.</li>
+      <li>رژیم و قدم روزانه در هفته‌های شلوغ هم سر جایشان می‌مانند.</li>
+      <li>بعد از وقفه با ۸۰ تا ۹۰ درصد وزنه‌های قبلی شروع کن و در ۱ تا ۲ هفته به جای قبل برگرد.</li>
+    </ul>
+    <h2>پیگیری</h2>
+    <ul>
+      <li><b>وزن:</b> ۳ صبح در هفته، بعد از دستشویی و قبل از صبحانه؛ میانگین هفته را با هفتهٔ قبل مقایسه کن.</li>
+      <li><b>دور کمر:</b> هفته‌ای ۱ بار روی ناف، بعد از بازدم عادی.</li>
+      <li><b>عکس:</b> هر ۴ هفته از جلو و پهلو.</li>
+      <li><b>قدم روزانه:</b> هفتهٔ اول فقط اندازه بگیر؛ بعد هر هفته ۱٬۰۰۰ قدم اضافه کن تا به ۷٬۰۰۰ برسی.</li>
+      <li>اگر ۲ هفته پشت‌سرهم کمتر از ۰٫۴ کیلو در هفته کم کردی، برنج ناهار و شام را هر کدام ۵۰ گرم کم کن.</li>
+      <li>اگر بعد از هفتهٔ دوم بیشتر از ۱ کیلو در هفته کم کردی، حدود ۱۰۰ گرم برنج به روز اضافه کن.</li>
+      <li>دو هفتهٔ اول را ملاک نگیر؛ آب کراتین و تغییر غذا ترازو را بالا و پایین می‌کنند.</li>
+    </ul>
+    <h2>نصب روی آیفون</h2>
+    <p>این صفحه را در Safari باز کن، از منوی Share گزینهٔ Add to Home Screen را بزن. آیکون «تمرین» مثل یک اپ روی صفحهٔ گوشی می‌آید و تمام‌صفحه باز می‌شود.</p>
+    <h2>تنظیمات</h2>
+    <div class="setrow"><span>هفتهٔ فعلی: <b>${fa(w)}</b></span>
+      <span class="stepper"><button data-act="wk-" aria-label="یک هفته عقب">−</button><button data-act="wk+" aria-label="یک هفته جلو">+</button></span></div>
+    <p class="note" id="offline">${offlineText()}</p>
+    <button class="btn line wide" data-act="reset">شروع دوباره از هفتهٔ ۱</button>
+    ${credits}
+    <p class="note" style="margin-top:28px">نسخهٔ ${APP_VERSION}</p>
+  </div>`;
+}
+
+function sheetHTML(id, ctx) {
+  const e = EX[id];
+  let plate = 'white', body = '';
+  if (SESSIONS[ctx]) {
+    const n = setsFor(week());
+    plate = SESSIONS[ctx].plate;
+    body = `<p class="dose">${fa(n)} ست، ${e.reps}<small>استراحت ${restText(e.rest)}</small></p>
+      ${setsBox(n, id, ctx)}
+      ${wtBox(id)}
+      <button class="btn wide" data-act="timer" data-sec="${e.rest}" data-label="استراحت">شروع استراحت ${restText(e.rest)}</button>`;
+  } else if (ctx === 'back') {
+    const b = BACK.find(x => x.id === id) || {};
+    body = `<p class="dose">${b.amt || ''}</p>${b.sec ? `<button class="btn wide" data-act="timer" data-sec="${b.sec}" data-label="${b.tl}">تایمر ${fa(b.sec)} ثانیه</button>` : ''}`;
+  } else {
+    plate = 'gray';
+    const min = cardioMin(week());
+    body = `<p class="dose">${e.reps}، ${cardioText(week())}</p><button class="btn wide" data-act="timer" data-sec="${min * 60}" data-label="هوازی">شروع تایمر ${fa(min)} دقیقه</button>`;
+  }
+  return `<div class="sh" style="${pv(plate)}">
+    <div class="shbar"><button class="close" data-act="close">بستن</button></div>
+    <div class="media"${hasVid(e.v) ? ` style="aspect-ratio:${VIDEOS[e.v].toFixed(4)}"` : ''}>${media(e.v)}</div>
+    ${e.vn ? `<p class="vnote">${e.vn}</p>` : ''}
+    <h2>${e.fa}</h2>
+    <p class="en" dir="ltr" lang="en">${e.en}</p>
+    ${body}
+    <h3>درست انجامش بده</h3>
+    <ul class="cues">${e.cues.map(c => `<li>${c}</li>`).join('')}</ul>
+    ${e.alt ? `<p class="alt"><b>جایگزین:</b> ${e.alt}</p>` : ''}
+  </div>`;
+}
+
+/* ---------- render ---------- */
+function render() {
+  let html;
+  if (state.tab === 'food') html = viewFood();
+  else if (state.tab === 'guide') html = viewGuide();
+  else if (state.view === 'session') html = viewSession(state.sid);
+  else if (state.view === 'back') html = viewBack();
+  else if (state.view === 'cardio') html = viewCardio();
+  else html = viewHome();
+  app.innerHTML = html;
+  document.querySelectorAll('.tab').forEach(t => {
+    if (t.dataset.tab === state.tab) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
+  });
+  bindVideos();
+}
+function go(next) {
+  Object.assign(state, {sid: null, from: null}, next);
+  closeSheet(true);
+  render();
+  window.scrollTo(0, 0);
+  keepAwake(state.tab === 'train' && state.view !== 'home');
+}
+
+/* ---------- videos: play only what is on screen ---------- */
+let io = null;
+if ('IntersectionObserver' in window) {
+  io = new IntersectionObserver(list => list.forEach(en => {
+    const v = en.target;
+    if (en.isIntersecting) {
+      if (!v.getAttribute('src') && v.dataset.src) v.src = v.dataset.src;
+      const p = v.play(); if (p && p.catch) p.catch(() => {});
+    } else v.pause();
+  }), {threshold: 0.3});
+}
+function bindVideos() {
+  if (io) io.disconnect();
+  const roots = [app]; if (sheet.classList.contains('open')) roots.push(sheet);
+  roots.forEach(r => r.querySelectorAll('video').forEach(v => {
+    if (io) io.observe(v);
+    else { v.src = v.dataset.src; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+  }));
+}
+
+/* ---------- sheet ---------- */
+function openSheet(id, ctx) {
+  sheet.innerHTML = sheetHTML(id, ctx);
+  sheet.classList.add('open');
+  sheet.scrollTop = 0;
+  document.body.classList.add('lock');
+  bindVideos();
+  const c = sheet.querySelector('.close'); if (c) c.focus({preventScroll: true});
+}
+function closeSheet(silent) {
+  if (!sheet.classList.contains('open')) return;
+  sheet.classList.remove('open');
+  document.body.classList.remove('lock');
+  sheet.querySelectorAll('video').forEach(v => v.pause());
+  if (!silent) bindVideos();
+}
+
+/* ---------- sets ---------- */
+function tapSet(id, ctx, k) {
+  const done = getDone(ctx, id);
+  let nv;
+  if (k < done) nv = k;
+  else { nv = k + 1; if (EX[id].rest) startTimer(EX[id].rest, 'استراحت'); }
+  setDone(ctx, id, nv);
+  document.querySelectorAll(`.sets[data-id="${id}"][data-ctx="${ctx}"]`).forEach(box => {
+    box.innerHTML = dots(+box.dataset.n, nv, id, ctx);
+  });
+}
+
+/* ---------- timer ---------- */
+const T = {end: 0, total: 0, label: '', iv: 0, done: false};
+const tClock = timerEl.querySelector('.clock'), tLabel = timerEl.querySelector('.lbl'), tProg = timerEl.querySelector('.prog');
+const tAdd = $('#tAdd'), tSkip = $('#tSkip');
+function startTimer(sec, label) {
+  T.total = sec * 1000; T.end = Date.now() + T.total; T.label = label; T.done = false;
+  clearInterval(T.iv); T.iv = setInterval(tick, 250);
+  timerEl.classList.remove('done'); timerEl.classList.add('show');
+  const ctxPlate = (SESSIONS[state.sid] && SESSIONS[state.sid].plate) || (state.view === 'back' ? 'white' : state.view === 'cardio' ? 'gray' : 'white');
+  timerEl.setAttribute('style', pv(ctxPlate));
+  tick();
+}
+function addTimer(s) { T.end += s * 1000; T.total += s * 1000; tick(); }
+function stopTimer() { clearInterval(T.iv); T.iv = 0; T.end = 0; T.done = false; timerEl.classList.remove('show', 'done'); }
+function tick() {
+  const left = T.end - Date.now();
+  if (left <= 0) {
+    if (!T.done) {
+      T.done = true; clearInterval(T.iv); T.iv = 0;
+      timerEl.classList.add('done'); beep();
+      try { if (navigator.vibrate) navigator.vibrate([200, 100, 200]); } catch (e) {}
+    }
+    paint(0); return;
+  }
+  paint(left);
+}
+function paint(left) {
+  const s = Math.ceil(left / 1000), m = Math.floor(s / 60), r = s % 60;
+  tClock.textContent = T.done ? 'تمام' : fa(m + ':' + String(r).padStart(2, '0'));
+  tLabel.textContent = T.done ? (T.label === 'استراحت' ? 'استراحت تمام شد؛ ست بعدی' : T.label + ' تمام شد') : T.label;
+  tProg.style.transform = 'scaleX(' + (T.total ? Math.max(0, left / T.total) : 0) + ')';
+  tAdd.hidden = T.done;
+  tSkip.textContent = T.done ? 'باشه' : 'رد کن';
+}
+
+/* ---------- sound and screen ---------- */
+let ac = null;
+function audioUnlock() {
+  try {
+    if (!ac) { const C = window.AudioContext || window.webkitAudioContext; if (C) ac = new C(); }
+    if (ac && ac.state === 'suspended') ac.resume();
+  } catch (e) {}
+}
+function beep() {
+  if (!ac) return;
+  try {
+    const t0 = ac.currentTime + 0.02;
+    for (let i = 0; i < 3; i++) {
+      const o = ac.createOscillator(), g = ac.createGain(), t = t0 + i * 0.28;
+      o.type = 'sine'; o.frequency.value = i === 2 ? 1175 : 880;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.35, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+      o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.25);
+    }
+  } catch (e) {}
+}
+let wl = null;
+async function keepAwake(on) {
+  try {
+    if (on) {
+      if (!wl && 'wakeLock' in navigator) { wl = await navigator.wakeLock.request('screen'); wl.addEventListener('release', () => { wl = null; }); }
+    } else if (wl) { await wl.release(); wl = null; }
+  } catch (e) { wl = null; }
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    if (T.end) tick();
+    keepAwake(state.tab === 'train' && state.view !== 'home');
+  }
+});
+
+/* ---------- toast ---------- */
+let tt = 0;
+function toast(msg) {
+  toastEl.textContent = msg; toastEl.classList.add('show');
+  clearTimeout(tt); tt = setTimeout(() => toastEl.classList.remove('show'), 2600);
+}
+
+/* ---------- actions ---------- */
+function finishSession(sid) {
+  const h = hist(); h.push({s: sid, t: Date.now()});
+  if (h.length > 500) h.splice(0, h.length - 500);
+  S.set('hist', h); stopTimer();
+  go({tab: 'train', view: 'home'});
+  toast('ثبت شد. جلسهٔ بعدی: ' + SESSIONS[nextSid()].name);
+}
+function finishBack() {
+  const from = state.from;
+  stopTimer();
+  if (from) go({tab: 'train', view: 'session', sid: from}); else go({tab: 'train', view: 'home'});
+  toast('روتین کمر انجام شد');
+}
+function adjWeek(d) {
+  const w = week();
+  if (w + d < 1) return;
+  S.set('wOff', S.get('wOff', 0) + d);
+  render();
+}
+function resetAll(btn) {
+  if (!btn.dataset.armed) {
+    btn.dataset.armed = '1';
+    btn.textContent = 'برای شروع دوباره، یک بار دیگر بزن';
+    setTimeout(() => { if (btn.isConnected) { delete btn.dataset.armed; btn.textContent = 'شروع دوباره از هفتهٔ ۱'; } }, 4000);
+    return;
+  }
+  ['start', 'wOff', 'hist', 'sets'].forEach(k => S.del(k));
+  stopTimer(); go({tab: 'train', view: 'home'});
+  toast('برنامه از هفتهٔ ۱ شروع شد');
+}
+
+document.addEventListener('click', ev => {
+  const el = ev.target.closest('[data-act]'); if (!el) return;
+  audioUnlock();
+  const d = el.dataset;
+  switch (d.act) {
+    case 'tab': go({tab: d.tab, view: 'home'}); break;
+    case 'home': go({tab: 'train', view: 'home'}); break;
+    case 'session': go({tab: 'train', view: 'session', sid: d.sid}); break;
+    case 'backr': go({tab: 'train', view: 'back', from: d.from || null}); break;
+    case 'cardio': go({tab: 'train', view: 'cardio', from: d.from || null}); break;
+    case 'up': go(state.from ? {tab: 'train', view: 'session', sid: state.from} : {tab: 'train', view: 'home'}); break;
+    case 'ex': openSheet(d.id, d.ctx); break;
+    case 'close': closeSheet(); break;
+    case 'set': tapSet(d.id, d.ctx, +d.k); break;
+    case 'timer': startTimer(+d.sec, d.label || 'استراحت'); break;
+    case 't+': addTimer(15); break;
+    case 'tskip': stopTimer(); break;
+    case 'finish': finishSession(d.sid); break;
+    case 'finish-back': finishBack(); break;
+    case 'wk-': adjWeek(-1); break;
+    case 'wk+': adjWeek(1); break;
+    case 'reset': resetAll(el); break;
+  }
+});
+document.addEventListener('input', ev => {
+  const i = ev.target.closest && ev.target.closest('input[data-wt]'); if (!i) return;
+  setW(i.dataset.wt, i.value);
+});
+document.addEventListener('change', ev => {
+  const i = ev.target.closest && ev.target.closest('input[data-wt]'); if (!i) return;
+  const v = setW(i.dataset.wt, i.value);
+  document.querySelectorAll(`input[data-wt="${i.dataset.wt}"]`).forEach(x => { x.value = v ? fa(v) : ''; });
+});
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape') closeSheet(); });
+
+/* ---------- offline ---------- */
+let swOK = false;
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  try {
+    navigator.serviceWorker.register('sw.js').then(() => {
+      swOK = true;
+      const el = document.getElementById('offline'); if (el) el.textContent = offlineText();
+      return navigator.serviceWorker.ready;
+    }).then(reg => {
+      const urls = []; Object.keys(VIDEOS).forEach(v => urls.push('v/' + v + '.mp4', 'v/' + v + '.jpg'));
+      if (reg && reg.active && urls.length) reg.active.postMessage({type: 'precache', urls});
+    }).catch(() => {});
+    navigator.serviceWorker.addEventListener('message', e => {
+      if (e.data && e.data.type === 'precached') {
+        S.set('offline', {n: e.data.n, total: e.data.total});
+        const el = document.getElementById('offline'); if (el) el.textContent = offlineText();
+      }
+    });
+  } catch (e) {}
+}
+
+render();
+})();
+</script>
+</body>
+</html>
