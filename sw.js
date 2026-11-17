@@ -1,5 +1,8 @@
 // Offline cache for the gym app. Bump V whenever files change.
-const V = 'gym-1.0';
+const V = 'gym-1.1';
+// Clips and posters live in their own cache so a new app version does not download them again.
+const M = 'gym-media';
+const isMedia = u => /\/v\/[^/]+\.(mp4|jpg)$/.test(new URL(u, self.location.href).pathname);
 const SHELL = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png',
   './fonts/IRANSansX-Regular.woff', './fonts/IRANSansX-Medium.woff', './fonts/IRANSansX-Bold.woff', './fonts/IRANSansX-ExtraBold.woff', './fonts/IRANSansX-ExtraBlack.woff'];
 
@@ -10,7 +13,7 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== V && k.startsWith('gym-')).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => k !== V && k !== M && k.startsWith('gym-')).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
@@ -20,7 +23,9 @@ self.addEventListener('message', e => {
   const d = e.data || {};
   if (d.type !== 'precache' || !Array.isArray(d.urls)) return;
   e.waitUntil((async () => {
-    const c = await caches.open(V);
+    const c = await caches.open(M);
+    const want = new Set(d.urls.map(u => new URL(u, self.location.href).href));
+    for (const k of await c.keys()) if (!want.has(k.url)) await c.delete(k);
     let n = 0;
     for (const u of d.urls) {
       try {
@@ -61,7 +66,7 @@ async function networkFirst(req) {
 }
 
 async function cacheFirst(req) {
-  const c = await caches.open(V);
+  const c = await caches.open(isMedia(req.url) ? M : V);
   const hit = await c.match(req, {ignoreSearch: true});
   if (hit) return hit;
   const r = await fetch(req);
@@ -71,7 +76,7 @@ async function cacheFirst(req) {
 
 // Safari asks for video in byte ranges; answer them from the cached file.
 async function rangeFromCache(req) {
-  const c = await caches.open(V);
+  const c = await caches.open(isMedia(req.url) ? M : V);
   const hit = await c.match(req.url.split('#')[0], {ignoreSearch: true});
   if (!hit) {
     try { return await fetch(req); } catch (err) { return new Response('', {status: 504}); }

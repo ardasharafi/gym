@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Do5MGLIX7RCuO7TkC2prs01f4ArMNLHMA+myZoW1O4A='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ofgxUbwUQYEK99kFVUSJZoSPpsnA2qtM9RixZ60aEi4='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>تمرین</title>
@@ -112,6 +112,19 @@ h1,h2,h3,p{margin:0}
 .shbar{display:flex;justify-content:flex-end;min-height:46px;align-items:center}
 .close{min-height:42px;padding:0 4px;color:var(--steel);font-weight:700;font-size:15px}
 .sh .media{border-radius:20px}
+.media svg.rig{position:absolute;inset:0;width:100%;height:100%}
+.strip .sv{position:relative;display:block;width:100%;aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--mat)}
+.strip .sv svg{position:absolute;inset:0;width:100%;height:100%}
+.strip-l{width:100%;margin-top:6px;color:var(--steel);font-size:13.5px}
+.rg-near{stroke:var(--chalk);fill:none;stroke-linecap:round;stroke-linejoin:round}
+.rg-far{stroke:#7F8990;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.rg-head{fill:var(--chalk)}
+.rg-eq{stroke:#4A535A;fill:none;stroke-linecap:round}
+.rg-bench{fill:#3A4248}
+.rg-mat{stroke:#3A4248;fill:#3A4248;stroke-linecap:round}
+.rg-cable{stroke:var(--steel);fill:none}
+.rg-acc{stroke:var(--c);fill:var(--c);stroke-linecap:round}
+.rg-nose{stroke:var(--rubber);stroke-linecap:round}
 .vnote{margin-top:12px;padding-inline-start:12px;box-shadow:inset -2px 0 0 var(--c);color:var(--steel);font-size:13.5px;line-height:1.6}
 .sh h2{margin-top:16px;font-size:24px;font-weight:800;line-height:1.45}
 .sh .dose{font-size:16px}
@@ -265,7 +278,7 @@ const CREDITS = [
   {fa:'تردمیل', src:'Pexels', url:PX('a-man-doing-leg-workout-on-the-treadmill', 4367637)},
   {fa:'دوچرخهٔ ثابت', src:'Pexels', url:PX('a-person-riding-an-exercise-bike-in-a-gym', 27861390)}
 ];
-const APP_VERSION = '۱٫۰';
+const APP_VERSION = '۱٫۱';
 
 /* ---------- program ---------- */
 const EX = {
@@ -293,7 +306,7 @@ const EX = {
     cues:['دمبل یا صفحه روی لگن، کف پاها نزدیک باسن.','با فشار پاشنه‌ها بالا بیا و بالا باسن را سفت کن.','دنده‌ها پایین؛ کمر قوس نگیرد.']},
   'calf-raise': {fa:'ساق پا', en:'Calf raise', v:'calf-raise', reps:'۱۲ تا ۱۵ تکرار', rest:60,
     cues:['پایین، پاشنه کامل پایین برود تا ساق کشیده شود.','روی پنجه بالا برو و ۱ ثانیه مکث کن.','ایستاده، روی پرس پا یا نشسته؛ هر کدام آزاد بود.']},
-  'pallof-press': {fa:'پالوف پرس با سیم‌کش', en:'Pallof press', v:'pallof-press', reps:'۱۰ تکرار برای هر سمت', rest:60,
+  'pallof-press': {fa:'پالوف پرس با سیم‌کش', en:'Pallof press', v:'pallof-press', vn:'از بالا دیده می‌شود؛ دستگاه سمت چپ توست.', reps:'۱۰ تکرار برای هر سمت', rest:60,
     cues:['پهلو به دستگاه بایست و دسته را جلوی سینه بگیر.','دست‌ها را صاف جلو ببر و ۲ ثانیه نگه دار.','شکم سفت؛ نگذار سیم تنه را بچرخاند.']},
   'db-shoulder-press': {fa:'پرس سرشانه با دمبل، نشسته', en:'Seated dumbbell shoulder press', v:'db-shoulder-press', reps:'۸ تا ۱۲ تکرار', rest:120,
     cues:['پشتی صاف یا کمی شیب‌دار و کمر چسبیده به آن.','دمبل‌ها از کنار گوش تا بالای سر.','کمر را قوس نده؛ ایستاده نزن.']},
@@ -420,9 +433,230 @@ function relDays(t) {
   return d <= 0 ? 'امروز' : d === 1 ? 'دیروز' : fa(d) + ' روز پیش';
 }
 
+/* Line-figure exercise demos, drawn as SVG and animated from keyframes.
+   Side view unless noted; the figure faces right. Units: viewBox 160 x 120, floor at y = 110. */
+const RIG = (() => {
+  const LEN = {torso: 26, neck: 4, head: 6.6, ua: 17.5, fa: 15, th: 23, sh: 22, ft: 8};
+  const rad = d => d * Math.PI / 180;
+  const dir = d => [Math.cos(rad(d)), Math.sin(rad(d))];
+  const add = (p, v, k = 1) => [p[0] + v[0] * k, p[1] + v[1] * k];
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+  // Middle joint of a two-bone limb from its root to its tip; bend = +1 or -1 picks the side.
+  function ik(a, c, l1, l2, bend) {
+    let dx = c[0] - a[0], dy = c[1] - a[1], d = Math.hypot(dx, dy);
+    const max = l1 + l2 - 1e-6;
+    if (d > max) { c = [a[0] + dx / d * max, a[1] + dy / d * max]; dx = c[0] - a[0]; dy = c[1] - a[1]; d = max; }
+    d = Math.max(d, Math.abs(l1 - l2) + 1e-6);
+    const x = (l1 * l1 - l2 * l2 + d * d) / (2 * d), h = Math.sqrt(Math.max(l1 * l1 - x * x, 0));
+    const ux = dx / d, uy = dy / d;
+    return [[a[0] + ux * x - uy * h * bend, a[1] + uy * x + ux * h * bend], c];
+  }
+
+  // Interpolate every number in two poses of the same shape.
+  function mix(p, q, t) {
+    if (typeof p === 'number') return lerp(p, q, t);
+    if (Array.isArray(p)) return p.map((v, i) => mix(v, q[i], t));
+    if (p && typeof p === 'object') { const o = {}; for (const k in p) o[k] = k in q ? mix(p[k], q[k], t) : p[k]; return o; }
+    return p;
+  }
+  // keys: [[time, pose], ...] with the last time = loop length; pose at the end should equal the first.
+  function sample(keys, t) {
+    const T = keys[keys.length - 1][0]; t = ((t % T) + T) % T;
+    for (let i = 0; i < keys.length - 1; i++) {
+      const [t0, p0] = keys[i], [t1, p1] = keys[i + 1];
+      if (t >= t0 && t <= t1) return t1 === t0 ? p1 : mix(p0, p1, ease((t - t0) / (t1 - t0)));
+    }
+    return keys[0][1];
+  }
+
+  /* Pose fields:
+     hip [x,y], tor (deg, hip to shoulder), nk (head tilt, deg added to tor)
+     arms: wN/wF wrist targets, ebN/ebF elbow bend side
+     legs: aN/aF ankle targets, kbN/kbF knee bend side, fN/fF foot angle
+     a limb may instead give angles: armN: [ua, fa] or legN: [th, sh]                                   */
+  function solve(p) {
+    const hip = p.hip, sh = add(hip, dir(p.tor), LEN.torso);
+    const neck = add(sh, dir(p.tor + (p.nk || 0)), LEN.neck), head = add(neck, dir(p.tor + (p.nk || 0)), LEN.head);
+    const limb = (root, tgt, ang, l1, l2, bend) => {
+      if (ang && Array.isArray(ang[0])) return [ang[0], ang[1]];          // explicit joint positions
+      if (ang) { const m = add(root, dir(ang[0]), l1); return [m, add(m, dir(ang[1]), l2)]; }
+      return ik(root, tgt, l1, l2, bend);
+    };
+    const [eN, wN] = limb(sh, p.wN, p.armN, LEN.ua, LEN.fa, p.ebN ?? 1);
+    const [eF, wF] = limb(sh, p.wF ?? p.wN, p.armF ?? p.armN, LEN.ua, LEN.fa, p.ebF ?? p.ebN ?? 1);
+    const [kN, aN] = limb(hip, p.aN, p.legN, LEN.th, LEN.sh, p.kbN ?? -1);
+    const [kF, aF] = limb(hip, p.aF ?? p.aN, p.legF, LEN.th, LEN.sh, p.kbF ?? p.kbN ?? -1);
+    const tN = add(aN, dir(p.fN ?? 0), LEN.ft), tF = add(aF, dir(p.fF ?? p.fN ?? 0), LEN.ft);
+    return {hip, sh, head, eN, wN, eF, wF, kN, aN, kF, aF, tN, tF};
+  }
+
+  const f = n => n.toFixed(1);
+  const line = (a, b, cls, w) => `<path class="${cls}" stroke-width="${w}" d="M${f(a[0])} ${f(a[1])}L${f(b[0])} ${f(b[1])}"/>`;
+  const poly = (pts, cls, w) => `<path class="${cls}" stroke-width="${w}" d="M${pts.map(p => f(p[0]) + ' ' + f(p[1])).join('L')}"/>`;
+  function figure(j, opt = {}) {
+    const far = poly([j.hip, j.kF, j.aF, j.tF], 'rg-far', 5.6) + poly([j.sh, j.eF, j.wF], 'rg-far', 5);
+    const near = poly([j.hip, j.kN, j.aN, j.tN], 'rg-near', 5.6) + poly([j.sh, j.eN, j.wN], 'rg-near', 5);
+    const body = line(j.hip, j.sh, 'rg-near', 10.5) + `<circle class="rg-head" cx="${f(j.head[0])}" cy="${f(j.head[1])}" r="${LEN.head}"/>`;
+    return {far, body, near};
+  }
+  const floor = (y = 110) => `<path class="rg-eq" stroke-width="1.4" d="M10 ${y + 1.5}H150"/>`;
+  const dumbbellSide = (w, ang = 0) => {   // dumbbell held with a neutral grip, seen from the side
+    const v = dir(ang), a = add(w, v, -6), b = add(w, v, 6);
+    return line(a, b, 'rg-acc', 2.2) + line(add(a, v, -1.5), add(a, v, 1.5), 'rg-acc', 7) + line(add(b, v, -1.5), add(b, v, 1.5), 'rg-acc', 7);
+  };
+
+  /* ---------- exercises ---------- */
+  const base = (o) => Object.assign({nk: 0, ebN: 1, kbN: -1, fN: 0}, o);
+  const X = {};
+
+  // Bird dog: on all fours, reach one arm forward and the opposite leg back, hold, switch.
+  {
+    const hip = [56, 84.5], tor = -12;
+    const s = add(hip, dir(tor), LEN.torso);
+    const hand = [s[0] + 1.5, 107.5], ankle = [hip[0] - 21.5, 107.8];
+    const P = base({hip, tor, nk: 8, wN: hand, wF: hand, aN: ankle, aF: ankle, kbN: -1, kbF: -1, fN: 180, fF: 180});
+    const legBack = [hip[0] - 44.5, hip[1] - 3], armFwd = [s[0] + 32.3, s[1] - 3];
+    // reach the knee target: thigh straight down needs the ankle behind the knee on the floor
+    const A = Object.assign({}, P, {wN: armFwd, aF: legBack, fF: 95});
+    const B = Object.assign({}, P, {wF: armFwd, aN: legBack, fN: 95});
+    X['bird-dog'] = {ar: 4 / 3, keys: [[0, P], [1.1, A], [2.6, A], [3.5, P], [4.0, P], [5.1, B], [6.6, B], [7.5, P], [8.0, P]],
+      draw: (j) => { const g = figure(j); return floor(108.5) + g.far + g.body + g.near; }};
+  }
+
+  // Dead bug: on the back, arms up, hips and knees at 90 degrees; lower opposite arm and leg.
+  {
+    const hip = [60, 101], tor = 0;
+    const s = add(hip, dir(tor), LEN.torso);
+    const up = [s[0], s[1] - 32], ank = [hip[0] - 22, hip[1] - 23];
+    const P = base({hip, tor, nk: -4, wN: up, wF: up, aN: ank, aF: ank, kbN: 1, kbF: 1, fN: -80, fF: -80, ebN: 1, ebF: 1});
+    const armOver = add(s, dir(-7), 32.3), legOut = add(hip, dir(187), 44.6);
+    const A = Object.assign({}, P, {wN: armOver, aF: legOut, fF: 200});
+    const B = Object.assign({}, P, {wF: armOver, aN: legOut, fN: 200});
+    X['dead-bug'] = {ar: 4 / 3, keys: [[0, P], [1.3, A], [1.9, A], [3.1, P], [3.6, P], [4.9, B], [5.5, B], [6.7, P], [7.2, P]],
+      draw: (j) => { const g = figure(j); return `<path class="rg-mat" d="M18 107.5H146" stroke-width="5"/>` + g.far + g.body + g.near; }};
+  }
+
+  // Half-kneeling hip flexor stretch: back knee down, squeeze the glute, shift the hips forward, reach up.
+  {
+    const P = base({hip: [57, 84.5], tor: -91, nk: -2, wN: [57, 86], wF: [74, 83], ebN: 1, ebF: 1,
+      aN: [32, 107.8], kbN: -1, fN: 180, aF: [87, 108.5], kbF: -1, fF: 0});
+    const Q = Object.assign({}, P, {hip: [62, 85.5], tor: -94, wN: [58, 26], ebN: 1, wF: [76, 85]});
+    X['hip-flexor'] = {ar: 4 / 3, keys: [[0, P], [1.5, Q], [4.0, Q], [5.4, P], [6.2, P]],
+      draw: (j) => { const g = figure(j); return floor() + g.far + g.body + g.near; }};
+  }
+
+  // Hip thrust: upper back on a bench, feet flat; drive the hips up until the body is flat, then lower.
+  {
+    const bench = `<path class="rg-bench" d="M10 80H48V110H10Z"/>`;
+    const sh = [47, 77.5];
+    const pose = (hip, ankle) => {
+      const tor = Math.atan2(sh[1] - hip[1], sh[0] - hip[0]) * 180 / Math.PI;
+      return base({hip, tor, nk: 4, wN: [hip[0] + 3, hip[1] - 7], wF: [hip[0] + 3, hip[1] - 7], ebN: -1, ebF: -1,
+        aN: ankle, aF: [ankle[0] + 3, ankle[1]], kbN: -1, kbF: -1, fN: 0, fF: 0});
+    };
+    const at = d => add(sh, dir(d), LEN.torso);
+    const lo = pose(at(42), [96, 108.5]), hi = pose(at(-1), [96, 108.5]);
+    X['hip-thrust'] = {ar: 4 / 3, keys: [[0, lo], [1.1, hi], [1.9, hi], [3.4, lo], [3.8, lo]],
+      draw: (j) => { const g = figure(j); const w = [j.hip[0] + 1, j.hip[1] - 8.5];
+        return floor() + bench + g.far + g.body + `<circle class="rg-acc" cx="${f(w[0])}" cy="${f(w[1])}" r="6.5" fill-opacity=".25" stroke-width="2.4"/>` + g.near; }};
+  }
+
+  // Cable pull-through: back to a low pulley, rope between the legs; hinge back, then stand by squeezing the glutes.
+  {
+    const col = `<path class="rg-bench" d="M10 18H22V110H10Z"/>`, pulley = [24, 103];
+    const stand = base({hip: [70, 63.5], tor: -87, nk: 0, wN: [73, 71], wF: [73, 71], ebN: 1,
+      aN: [69, 108.5], aF: [73, 108.5], kbN: -1, fN: 0, fF: 0});
+    const hinge = Object.assign({}, stand, {hip: [57, 67.5], tor: -36, nk: 10, wN: [68, 84], wF: [68, 84]});
+    X['pull-through'] = {ar: 4 / 3, keys: [[0, stand], [1.5, hinge], [1.9, hinge], [3.0, stand], [3.7, stand]],
+      draw: (j) => { const g = figure(j);
+        return floor() + col + g.far + line(pulley, j.wN, 'rg-cable', 1.3) + g.body + g.near; }};
+  }
+
+  // Face pull: rope at face height; pull toward the forehead with the elbows high, squeeze, return.
+  {
+    const col = `<path class="rg-bench" d="M138 18H150V110H138Z"/>`, pulley = [136, 36];
+    const P = base({hip: [64, 63.5], tor: -90, nk: 0, armN: [[81.5, 37.5], [96.5, 37.5]],
+      aN: [60, 108.5], aF: [70, 108.5], fN: 0, fF: 0});
+    const Q = Object.assign({}, P, {armN: [[52.5, 30.5], [67.5, 22.5]], tor: -92});
+    X['face-pull'] = {ar: 4 / 3, keys: [[0, P], [1.0, Q], [1.8, Q], [3.2, P], [3.6, P]],
+      draw: (j) => { const g = figure(j);
+        return floor() + col + g.far + g.body + line(pulley, j.wN, 'rg-cable', 1.3) + g.near; }};
+  }
+
+  // Seated/lying leg curl: lying face down, bend the knees to bring the heels up, lower slowly.
+  {
+    const bench = `<path class="rg-bench" d="M30 87H128V93H30Z"/><path class="rg-eq" stroke-width="3" d="M40 93V110M118 93V110"/>`;
+    const pose = th => base({hip: [72, 81], tor: 0, nk: 8, legN: [180, th], legF: [180, th], fN: th + 270, fF: th + 270,
+      wN: [113, 95], wF: [113, 95], ebN: 1, ebF: 1});
+    const P = pose(181), Q = pose(298);
+    X['leg-curl'] = {ar: 4 / 3, keys: [[0, P], [1.1, Q], [1.6, Q], [3.6, P], [4.0, P]],
+      draw: (j) => { const g = figure(j); const v = [j.aN[0] - j.kN[0], j.aN[1] - j.kN[1]], L = Math.hypot(...v);
+        const n = [-v[1] / L, v[0] / L]; const pad = add(j.aN, n, -5.2);
+        const pivot = [j.kN[0] - 1, j.kN[1] + 6];
+        return floor() + bench + g.far + g.body + g.near + line(pivot, pad, 'rg-eq', 2.4) +
+          `<circle class="rg-acc" cx="${f(pad[0])}" cy="${f(pad[1])}" r="4.2" fill-opacity=".25" stroke-width="2"/>`; }};
+  }
+
+  // Farmer's carry: tall walk with a heavy dumbbell in each hand.
+  {
+    X['farmer-carry'] = {ar: 4 / 3, T: 1.2, pose: t => {
+      const ph = (t % 1.2) / 1.2, hipx = 72, bob = Math.cos(ph * 4 * Math.PI) * 0.9;
+      const foot = q => {             // q in [0,1): 0..0.6 on the ground moving back, 0.6..1 swinging forward
+        if (q < 0.6) { const u = q / 0.6; return [hipx + 15 - 30 * u, 108.5]; }
+        const u = (q - 0.6) / 0.4; return [hipx - 15 + 30 * u, 108.5 - Math.sin(u * Math.PI) * 7];
+      };
+      const fN = foot(ph), fF = foot((ph + 0.5) % 1);
+      return base({hip: [hipx, 64 + bob], tor: -89, wN: [hipx + 1.5, 99 + bob], wF: [hipx + 1.5, 99 + bob], ebN: 1, ebF: 1,
+        aN: fN, aF: fF, kbN: -1, kbF: -1, fN: 0, fF: 0});
+    }, draw: (j, t) => { const g = figure(j); const off = (t % 1.2) / 1.2 * 30;
+      let marks = ''; for (let x = 10 - off; x < 160; x += 30) if (x > 8) marks += `<path class="rg-eq" stroke-width="1.4" d="M${f(x)} 111.5h12"/>`;
+      return marks + g.far + dumbbellSide(add(j.wF, [0, 3.5])) + g.body + g.near + dumbbellSide(add(j.wN, [0, 3.5])); }};
+  }
+
+  // Pallof press, seen from above: side-on to the cable, press the handle straight out, hold, bring it back.
+  {
+    X['pallof-press'] = {ar: 4 / 3, top: true,
+      keys: [[0, {h: 0}], [1.0, {h: 1}], [3.0, {h: 1}], [4.0, {h: 0}], [4.6, {h: 0}]],
+      draw: (_, t, p) => {
+        const c = [84, 76], shL = [70, 76], shR = [98, 76];
+        const hand = [84, lerp(60, 36, p.h)];
+        const pulley = [16, 60];
+        const arm = (s) => { const [e, w] = ik(s, hand, 15, 14, s[0] < c[0] ? 1 : -1); return poly([s, e, w], 'rg-near', 5); };
+        return `<rect class="rg-mat" x="58" y="62" width="52" height="34" rx="8" fill-opacity=".35" stroke-width="0"/>` +
+          `<path class="rg-bench" d="M6 44H16V76H6Z"/>` + line(pulley, hand, 'rg-cable', 1.3) +
+          `<path class="rg-far" stroke-width="7" d="M76 92h-4M96 92h-4"/>` +
+          line(shL, shR, 'rg-near', 11) + arm(shL) + arm(shR) +
+          `<circle class="rg-head" cx="${c[0]}" cy="${c[1]}" r="7.2"/><path class="rg-nose" stroke-width="2.4" d="M84 68.5v-3"/>` +
+          `<circle class="rg-acc" cx="${f(hand[0])}" cy="${f(hand[1])}" r="3.2" fill-opacity=".9" stroke-width="0"/>`;
+      }};
+  }
+
+  function frame(id, t) {
+    const x = X[id]; if (!x) return '';
+    if (x.top) return x.draw(null, t, sample(x.keys, t));
+    const p = x.pose ? x.pose(t) : sample(x.keys, t);
+    return x.draw(solve(p), t);
+  }
+  const STILL = {'bird-dog': 2, 'dead-bug': 1.6, 'hip-flexor': 3, 'hip-thrust': 1.5, 'pull-through': 1.7,
+    'face-pull': 1.4, 'leg-curl': 1.3, 'farmer-carry': 0.3, 'pallof-press': 2};
+  const still = id => STILL[id] || 0;
+  // square crops that frame each figure for the small list tiles
+  const BOX = {'bird-dog': '8 22 116 116', 'dead-bug': '10 28 120 120', 'hip-flexor': '12 16 98 98', 'hip-thrust': '6 28 106 106',
+    'pull-through': '8 14 98 98', 'face-pull': '50 12 102 102', 'leg-curl': '14 24 118 118', 'farmer-carry': '24 12 100 100',
+    'pallof-press': '6 12 108 108'};
+  const box = id => BOX[id] || '0 0 160 120';
+  const has = id => Object.prototype.hasOwnProperty.call(X, id);
+  const ratio = id => (X[id] || {}).ar || 4 / 3;
+  return {frame, has, ratio, still, box};
+})();
+
 /* ---------- pieces ---------- */
-function media(v) {
+const rigSVG = (v, big) => `<svg class="rig" viewBox="${big ? '0 0 160 120' : RIG.box(v)}" preserveAspectRatio="xMidYMid meet" data-rig="${v}" aria-hidden="true">${RIG.frame(v, RIG.still(v))}</svg>`;
+function media(v, big) {
   if (hasVid(v)) return `<video muted playsinline loop preload="none" disablepictureinpicture poster="v/${v}.jpg" data-src="v/${v}.mp4"></video>`;
+  if (RIG.has(v)) return rigSVG(v, big);
   return '<span class="ph"><i></i>ویدیو در نسخهٔ بعد</span>';
 }
 function dots(n, done, id, ctx) {
@@ -448,13 +682,13 @@ function viewHome() {
   const last = h[h.length - 1];
   const strip = s.items.map(id => {
     const v = EX[id].v;
-    return hasVid(v) ? `<img src="v/${v}.jpg" alt="" decoding="async">` : '<i></i>';
+    return hasVid(v) ? `<img src="v/${v}.jpg" alt="" decoding="async">` : RIG.has(v) ? `<span class="sv">${rigSVG(v)}</span>` : '<i></i>';
   }).join('');
-  const rows = ORDER.map(id => {
+  const rows = ORDER.map((id, n) => {
     const x = SESSIONS[id];
     return `<button class="row" style="${pv(x.plate)}" data-act="session" data-sid="${id}">
       <span class="plate" aria-hidden="true"></span>
-      <span class="t"><b>${x.name}${id === sid ? '<span class="pill">بعدی</span>' : ''}</b><small>${x.sub}</small></span>${ICON.fwd}</button>`;
+      <span class="t"><b>${x.name}${id === sid ? '<span class="pill">بعدی</span>' : ''}</b><small>جلسهٔ ${fa(n + 1)}: ${x.sub}</small></span>${ICON.fwd}</button>`;
   }).join('');
   return `
   <header class="top"><h1 class="disp brand">تمرین</h1><p class="wk">${weekLabel(w)}</p></header>
@@ -466,10 +700,11 @@ function viewHome() {
       <p class="meta">۶ حرکت، از هر کدام ${fa(setsFor(w))} ست<br>بعدش ${cardioText(w)} هوازی</p>
       <button class="btn" data-act="session" data-sid="${sid}">شروع جلسه</button>
     </div>
+    <p class="strip-l">۶ حرکتِ همین جلسه</p>
     <div class="strip" aria-hidden="true">${strip}</div>
   </section>
   ${last ? `<p class="last">آخرین جلسه: ${SESSIONS[last.s].name}، ${relDays(last.t)}</p>` : ''}
-  <h2 class="sec">همهٔ جلسه‌ها</h2>
+  <h2 class="sec">۴ جلسهٔ هفته؛ هر روز باشگاه یکی، به همین ترتیب</h2>
   <div>${rows}</div>
   <h2 class="sec">کنار تمرین</h2>
   <div>
@@ -726,7 +961,8 @@ function sheetHTML(id, ctx) {
   }
   return `<div class="sh" style="${pv(plate)}">
     <div class="shbar"><button class="close" data-act="close">بستن</button></div>
-    <div class="media"${hasVid(e.v) ? ` style="aspect-ratio:${VIDEOS[e.v].toFixed(4)}"` : ''}>${media(e.v)}</div>
+    <div class="media"${hasVid(e.v) ? ` style="aspect-ratio:${VIDEOS[e.v].toFixed(4)}"` : RIG.has(e.v) ? ' style="aspect-ratio:1.3333"' : ''}>${media(e.v, true)}</div>
+    ${!hasVid(e.v) && RIG.has(e.v) ? '<p class="vnote">نمایش ساده‌شدهٔ حرکت؛ دست و پای سمت دور کم‌رنگ‌ترند.</p>' : ''}
     ${e.vn ? `<p class="vnote">${e.vn}</p>` : ''}
     <h2>${e.fa}</h2>
     <p class="en" dir="ltr" lang="en">${e.en}</p>
@@ -761,10 +997,23 @@ function go(next) {
 }
 
 /* ---------- videos: play only what is on screen ---------- */
+const rigOn = new Set();
+let rigRAF = 0;
+const calm = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+function rigTick(now) {
+  rigRAF = 0;
+  if (!rigOn.size) return;
+  rigOn.forEach(el => { if (el.isConnected) el.innerHTML = RIG.frame(el.dataset.rig, now / 1000); else rigOn.delete(el); });
+  rigRAF = requestAnimationFrame(rigTick);
+}
+function rigPlay(el) { if (calm) return; rigOn.add(el); if (!rigRAF) rigRAF = requestAnimationFrame(rigTick); }
+function rigStop(el) { rigOn.delete(el); }
+
 let io = null;
 if ('IntersectionObserver' in window) {
   io = new IntersectionObserver(list => list.forEach(en => {
     const v = en.target;
+    if (v.tagName.toLowerCase() === 'svg') { if (en.isIntersecting) rigPlay(v); else rigStop(v); return; }
     if (en.isIntersecting) {
       if (!v.getAttribute('src') && v.dataset.src) v.src = v.dataset.src;
       const p = v.play(); if (p && p.catch) p.catch(() => {});
@@ -773,11 +1022,15 @@ if ('IntersectionObserver' in window) {
 }
 function bindVideos() {
   if (io) io.disconnect();
+  rigOn.clear();
   const roots = [app]; if (sheet.classList.contains('open')) roots.push(sheet);
-  roots.forEach(r => r.querySelectorAll('video').forEach(v => {
-    if (io) io.observe(v);
-    else { v.src = v.dataset.src; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
-  }));
+  roots.forEach(r => {
+    r.querySelectorAll('video').forEach(v => {
+      if (io) io.observe(v);
+      else { v.src = v.dataset.src; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+    });
+    r.querySelectorAll('.media svg.rig').forEach(el => { if (io) io.observe(el); else rigPlay(el); });
+  });
 }
 
 /* ---------- sheet ---------- */
@@ -794,6 +1047,7 @@ function closeSheet(silent) {
   sheet.classList.remove('open');
   document.body.classList.remove('lock');
   sheet.querySelectorAll('video').forEach(v => v.pause());
+  sheet.querySelectorAll('svg.rig').forEach(rigStop);
   if (!silent) bindVideos();
 }
 
