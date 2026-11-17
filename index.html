@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ofgxUbwUQYEK99kFVUSJZoSPpsnA2qtM9RixZ60aEi4='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-cXNWAivwOwasvz5aAznncnCYv+9BVzEuQvMRyPzJoic='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>تمرین</title>
@@ -252,7 +252,7 @@ const VIDEOS = {
   'chest-press': 4/3, 'cable-row': 4/3, 'incline-db-press': 1, 'lat-pulldown': 1, 'rope-pushdown': 1, 'db-curl': 1,
   'leg-press': 4/3, 'leg-extension': 1, 'glute-bridge': 4/3, 'calf-raise': 1,
   'db-shoulder-press': 1, 'close-pulldown': 1, 'db-bench': 4/3, 'db-row': 1, 'lateral-raise': 4/3,
-  'cat-camel': 4/3, 'side-plank': 16/9, 'treadmill': 4/3, 'bike': 4/3
+  'cat-camel': 4/3, 'side-plank': 16/9, 'hip-flexor': 4/3, 'hip-thrust': 4/3, 'treadmill': 4/3, 'bike': 4/3
 };
 const hasVid = v => !!v && Object.prototype.hasOwnProperty.call(VIDEOS, v);
 const PX = (slug, id) => `https://www.pexels.com/video/${slug}-${id}/`;
@@ -275,10 +275,12 @@ const CREDITS = [
   {fa:'نشر جانب', src:'Pexels', url:PX('a-man-working-out-using-dumbbell', 5319102)},
   {fa:'گربه و شتر', src:'Pexels', url:PX('a-man-stretching-on-a-yoga-mat', 6298132)},
   {fa:'پلانک پهلو', src:'Pexels', url:PX('a-man-exercising', 6023265)},
+  {fa:'هیپ تراست', src:'Pixabay', url:'https://pixabay.com/videos/crossfit-fitness-gym-workout-66367/'},
+  {fa:'کشش جلوی لگن', src:'DVIDS، تفنگداران دریایی آمریکا', url:'https://www.dvidshub.net/video/551136'},
   {fa:'تردمیل', src:'Pexels', url:PX('a-man-doing-leg-workout-on-the-treadmill', 4367637)},
   {fa:'دوچرخهٔ ثابت', src:'Pexels', url:PX('a-person-riding-an-exercise-bike-in-a-gym', 27861390)}
 ];
-const APP_VERSION = '۱٫۱';
+const APP_VERSION = '۱٫۲';
 
 /* ---------- program ---------- */
 const EX = {
@@ -321,7 +323,7 @@ const EX = {
     cues:['وزنهٔ سبک و آرنج کمی خم.','دمبل‌ها تا هم‌سطح شانه، نه بالاتر.','تنه تاب نخورد.']},
   'face-pull': {fa:'فیس‌پول با سیم‌کش', en:'Face pull', v:'face-pull', reps:'۱۲ تا ۱۵ تکرار', rest:60,
     cues:['قرقره هم‌سطح صورت یا کمی بالاتر.','طناب را به سمت پیشانی بکش و آرنج‌ها بالا بمانند.','آخر حرکت کتف‌ها را به هم نزدیک کن.']},
-  'hip-thrust': {fa:'هیپ تراست روی نیمکت', en:'Hip thrust', v:'hip-thrust', reps:'۸ تا ۱۲ تکرار', rest:120,
+  'hip-thrust': {fa:'هیپ تراست روی نیمکت', en:'Hip thrust', v:'hip-thrust', vn:'در ویدیو با هالتر است؛ با دمبل یا صفحه روی لگن هم همین حرکت است.', reps:'۸ تا ۱۲ تکرار', rest:120,
     cues:['لبهٔ نیمکت زیر کتف‌ها و کف پاها روی زمین.','با فشار پاشنه‌ها بالا بیا تا تنه صاف شود، نه بیشتر.','چانه و دنده‌ها پایین؛ کمر قوس نگیرد.'],
     alt:'پل باسن روی زمین با وزنه'},
   'high-leg-press': {fa:'پرس پا با پای بالاتر', en:'High-foot leg press', v:'leg-press', vn:'مثل ویدیو، فقط پاها را بالاتر روی صفحه بگذار.', reps:'۱۰ تا ۱۵ تکرار', rest:120,
@@ -341,7 +343,7 @@ const EX = {
     cues:['روی آرنج و زانوها؛ از سر تا زانو یک خط صاف.','لگن را بالا نگه دار و عادی نفس بکش.']},
   'glute-bridge': {fa:'پل باسن بدون وزنه', en:'Glute bridge', v:'glute-bridge',
     cues:['اول لگن را کمی به عقب بچرخان، بعد بالا بیا.','بالا باسن را سفت کن؛ کمر قوس نگیرد.']},
-  'hip-flexor': {fa:'کشش جلوی لگن', en:'Half-kneeling hip flexor stretch', v:'hip-flexor',
+  'hip-flexor': {fa:'کشش جلوی لگن', en:'Half-kneeling hip flexor stretch', v:'hip-flexor', vn:'در ویدیو برای صاف ماندن تنه یک چوب دستش است؛ بدون چوب هم می‌شود.',
     cues:['یک زانو روی زمین و پای دیگر جلو.','باسنِ پای عقب را سفت کن و کمی جلو برو.','کمر قوس نگیرد.']},
 
   'treadmill': {fa:'تردمیل شیب‌دار', en:'Incline treadmill walk', v:'treadmill', reps:'شیب ۳ تا ۶ درصد، پیاده‌روی تند',
@@ -876,7 +878,8 @@ function offlineText() {
 function viewGuide() {
   const w = week();
   const credits = CREDITS.length
-    ? `<h2>منبع ویدیوها</h2><ul class="credits">${CREDITS.map(c => `<li>${c.fa}: <a href="${c.url}" target="_blank" rel="noopener">${c.src}</a></li>`).join('')}</ul>` : '';
+    ? `<h2>منبع ویدیوها</h2><ul class="credits">${CREDITS.map(c => `<li>${c.fa}: <a href="${c.url}" target="_blank" rel="noopener">${c.src}</a></li>`).join('')}</ul>` +
+      (CREDITS.some(c => c.src.startsWith('DVIDS')) ? '<p class="note">ویدیوهای DVIDS از آرشیو عمومی ارتش آمریکاست؛ استفاده از آن‌ها به معنی تأیید این اپ از طرف آن‌ها نیست.</p>' : '') : '';
   return `
   <h1 class="disp ptitle">راهنما</h1>
   <div class="prose">
