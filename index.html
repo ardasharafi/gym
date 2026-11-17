@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-cXNWAivwOwasvz5aAznncnCYv+9BVzEuQvMRyPzJoic='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-SBy+CWW8fuXFAV95nvKETwI2k8IAck0AdWTWpq494Zk='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>تمرین</title>
@@ -252,7 +252,7 @@ const VIDEOS = {
   'chest-press': 4/3, 'cable-row': 4/3, 'incline-db-press': 1, 'lat-pulldown': 1, 'rope-pushdown': 1, 'db-curl': 1,
   'leg-press': 4/3, 'leg-extension': 1, 'glute-bridge': 4/3, 'calf-raise': 1,
   'db-shoulder-press': 1, 'close-pulldown': 1, 'db-bench': 4/3, 'db-row': 1, 'lateral-raise': 4/3,
-  'cat-camel': 4/3, 'side-plank': 16/9, 'hip-flexor': 4/3, 'hip-thrust': 4/3, 'treadmill': 4/3, 'bike': 4/3
+  'cat-camel': 4/3, 'side-plank': 16/9, 'hip-flexor': 4/3, 'hip-thrust': 4/3, 'farmer-carry': 4/3, 'treadmill': 4/3, 'bike': 4/3
 };
 const hasVid = v => !!v && Object.prototype.hasOwnProperty.call(VIDEOS, v);
 const PX = (slug, id) => `https://www.pexels.com/video/${slug}-${id}/`;
@@ -277,10 +277,11 @@ const CREDITS = [
   {fa:'پلانک پهلو', src:'Pexels', url:PX('a-man-exercising', 6023265)},
   {fa:'هیپ تراست', src:'Pixabay', url:'https://pixabay.com/videos/crossfit-fitness-gym-workout-66367/'},
   {fa:'کشش جلوی لگن', src:'DVIDS، تفنگداران دریایی آمریکا', url:'https://www.dvidshub.net/video/551136'},
+  {fa:'راه‌رفتن کشاورز', src:'DVIDS، تفنگداران دریایی آمریکا', url:'https://www.dvidshub.net/video/640980'},
   {fa:'تردمیل', src:'Pexels', url:PX('a-man-doing-leg-workout-on-the-treadmill', 4367637)},
   {fa:'دوچرخهٔ ثابت', src:'Pexels', url:PX('a-person-riding-an-exercise-bike-in-a-gym', 27861390)}
 ];
-const APP_VERSION = '۱٫۲';
+const APP_VERSION = '۱٫۳';
 
 /* ---------- program ---------- */
 const EX = {
@@ -330,7 +331,7 @@ const EX = {
     cues:['پاها را بالاتر از همیشه روی صفحه بگذار.','فشار را از پاشنه‌ها بده.','لگن از صندلی جدا نشود.']},
   'pull-through': {fa:'پول‌ترو با سیم‌کش', en:'Cable pull-through', v:'pull-through', reps:'۱۲ تا ۱۵ تکرار', rest:90,
     cues:['پشت به دستگاه بایست و طناب را از بین پاها بگیر.','از لگن خم شو و باسن را عقب ببر؛ کمر صاف.','با سفت کردن باسن بایست؛ به عقب خم نشو.']},
-  'farmer-carry': {fa:'راه‌رفتن کشاورز با دو دمبل', en:"Farmer's carry", v:'farmer-carry', reps:'۳۰ متر', rest:60,
+  'farmer-carry': {fa:'راه‌رفتن کشاورز با دو دمبل', en:"Farmer's carry", v:'farmer-carry', vn:'در ویدیو با دو کتل‌بل است؛ با دو دمبل هم همین حرکت است.', reps:'۳۰ متر', rest:60,
     cues:['دو دمبل سنگین کنار بدن.','قد بلند، شانه‌ها پایین، شکم سفت.','قدم‌های کوتاه و آرام.']},
 
   'cat-camel': {fa:'گربه و شتر', en:'Cat-camel', v:'cat-camel',

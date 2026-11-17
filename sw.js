@@ -1,5 +1,5 @@
 // Offline cache for the gym app. Bump V whenever files change.
-const V = 'gym-1.2';
+const V = 'gym-1.3';
 // Clips and posters live in their own cache so a new app version does not download them again.
 const M = 'gym-media';
 const isMedia = u => /\/v\/[^/]+\.(mp4|jpg)$/.test(new URL(u, self.location.href).pathname);
